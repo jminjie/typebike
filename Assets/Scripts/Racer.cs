@@ -19,30 +19,34 @@ public class Racer : MonoBehaviour
 
     public Floor floor;
 
-    private void Awake()
+    public void Awake(int x, int y)
     {
-        gridPosition = new Vector2(5, 6);
+        gridPosition = new Vector2(x, y);
         moveTimerMax = 1f/60f;
         moveTimer = moveTimerMax;
         floor = GameObject.Find("Floor").GetComponent<Floor>();
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update(
+        bool upPressed,
+        bool downPressed,
+        bool leftPressed,
+        bool rightPressed)
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (upPressed)
         {
             currentDirection = UP;
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (downPressed)
         {
             currentDirection = DOWN;
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (leftPressed)
         {
             currentDirection = LEFT;
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (rightPressed)
         {
             currentDirection = RIGHT;
         }

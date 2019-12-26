@@ -63,8 +63,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Floor.cs" />
     <Compile Include="Assets\Scripts\GameHandler.cs" />
+    <Compile Include="Assets\Scripts\Letter.cs" />
     <Compile Include="Assets\Scripts\Racer.cs" />
+    <Compile Include="Assets\Scripts\Racer1.cs" />
     <Compile Include="Assets\Scripts\Racer2.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/Users/jminjie/TypeByke/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
