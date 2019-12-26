@@ -20,6 +20,12 @@ public class Floor : MonoBehaviour
         
     }
 
+    public void shipMoved(Vector2 position)
+    {
+        // check if ship's position is on the outer rim (destroy ship)
+        // check if ship's position is on a letter
+    }
+
     // Update is called once per frame
     void Update()
     {
