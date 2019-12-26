@@ -8,6 +8,7 @@ public class Racer1 : Racer
     void Awake()
     {
         base.Awake(5,6);
+        playerNum = 1;
     }
 
     // Update is called once per frame
