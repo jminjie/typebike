@@ -17,32 +17,36 @@ public class Racer : MonoBehaviour
     private int currentDirection = UP;
     private float velocity = 50.0f;
 
+    public Floor floor;
 
-
-    private void Awake()
+    public void Awake(int x, int y)
     {
-        gridPosition = new Vector2(5, 6);
+        gridPosition = new Vector2(x, y);
         moveTimerMax = 1f/60f;
         moveTimer = moveTimerMax;
-
+        floor = GameObject.Find("Floor").GetComponent<Floor>();
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update(
+        bool upPressed,
+        bool downPressed,
+        bool leftPressed,
+        bool rightPressed)
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (upPressed)
         {
             currentDirection = UP;
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (downPressed)
         {
             currentDirection = DOWN;
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (leftPressed)
         {
             currentDirection = LEFT;
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (rightPressed)
         {
             currentDirection = RIGHT;
         }
@@ -67,6 +71,7 @@ public class Racer : MonoBehaviour
             }
             transform.position = new Vector3(gridPosition.x, gridPosition.y);
             moveTimer = 0;
+            floor.shipMoved(gridPosition);
         }
     }
 }
