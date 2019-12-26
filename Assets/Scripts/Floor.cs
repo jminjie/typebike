@@ -40,8 +40,9 @@ public class Floor : MonoBehaviour
         letters.Add(letter);
     }
 
-    public void shipMoved(Vector2 position)
+    public void shipMoved(Racer racer)
     {
+        Vector2 position = racer.getPosition();
         // check if ship's position is on the outer rim (destroy ship)
         // check if ship's position is on a letter
         foreach (Letter l in letters)
