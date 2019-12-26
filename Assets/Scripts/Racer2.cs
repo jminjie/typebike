@@ -17,6 +17,7 @@ public class Racer2 : MonoBehaviour
     private int currentDirection = UP;
     private float velocity = 50.0f;
 
+    public Floor floor;
 
 
     private void Awake()
@@ -24,6 +25,7 @@ public class Racer2 : MonoBehaviour
         gridPosition = new Vector2(50, 50);
         moveTimerMax = 1f / 60f;
         moveTimer = moveTimerMax;
+        floor = GameObject.Find("Floor").GetComponent<Floor>();
 
     }
 
@@ -68,6 +70,7 @@ public class Racer2 : MonoBehaviour
             }
             transform.position = new Vector3(gridPosition.x, gridPosition.y);
             moveTimer = 0;
+            floor.shipMoved(gridPosition);
         }
     }
 }
