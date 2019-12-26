@@ -27,6 +27,11 @@ public class Racer : MonoBehaviour
         floor = GameObject.Find("Floor").GetComponent<Floor>();
     }
 
+    public Vector2 getPosition()
+    {
+        return gridPosition;
+    }
+
     // Update is called once per frame
     public void Update(
         bool upPressed,
@@ -71,7 +76,7 @@ public class Racer : MonoBehaviour
             }
             transform.position = new Vector3(gridPosition.x, gridPosition.y);
             moveTimer = 0;
-            floor.shipMoved(gridPosition);
+            floor.shipMoved(this);
         }
     }
 }
