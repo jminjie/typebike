@@ -10,10 +10,16 @@ public class Letter
 
     public Letter(Vector2 pos)
     {
+        Debug.Log("Letter is generated");
         position = pos;
-        letterGameObject = new GameObject("Letter A", typeof(Text));
-        letterGameObject.GetComponent<Text>().text = "A";
+        letterGameObject = new GameObject("Letter A", typeof(TextMesh));
         letterGameObject.transform.position = new Vector3(pos.x, pos.y);
+        letterGameObject.transform.localScale += new Vector3(3, 3);
+        TextMesh mesh = letterGameObject.GetComponent<TextMesh>();
+        mesh.text = "A";
+        mesh.alignment = TextAlignment.Center;
+        mesh.anchor = TextAnchor.MiddleCenter;
+
     }
 
     public Vector2 getPosition()
@@ -21,21 +27,9 @@ public class Letter
         return position;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public void destroy()
     {
         Debug.Log("DESTROYING LETTER A at position=" + position);
         GameObject.Destroy(letterGameObject);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

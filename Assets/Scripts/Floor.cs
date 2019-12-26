@@ -44,15 +44,19 @@ public class Floor : MonoBehaviour
     {
         // check if ship's position is on the outer rim (destroy ship)
         // check if ship's position is on a letter
-        Debug.Log("ship moved to " + position.x + "," + position.y);
         foreach (Letter l in letters)
         {
-            if (l.getPosition() == position)
+            if (withinRange(l.getPosition(), position))
             {
                 // ship.consumeLetter(l);
                 l.destroy();
             }
         }
+    }
+
+    private bool withinRange(Vector2 me, Vector2 them)
+    {
+        return System.Math.Abs(me.x - them.x) < 3 && System.Math.Abs(me.y - them.y) < 3;
     }
 
     // Update is called once per frame
