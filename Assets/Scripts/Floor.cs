@@ -40,10 +40,22 @@ public class Floor : MonoBehaviour
         letters.Add(letter);
     }
 
+    public bool OutOfBounds(Vector2 position) {
+        if (position.x < 0 || position.x > width || position.y < 0 || position.y > height) {
+            return true;
+        }
+        return false;
+    }
+
     public void shipMoved(Racer racer)
     {
         Vector2 position = racer.getPosition();
         // check if ship's position is on the outer rim (destroy ship)
+        if (OutOfBounds(position)) {
+            Destroy(racer);
+        }
+
+
         // check if ship's position is on a letter
         foreach (Letter l in letters)
         {
@@ -53,6 +65,7 @@ public class Floor : MonoBehaviour
                 l.destroy();
             }
         }
+        
     }
 
     // Update is called once per frame
