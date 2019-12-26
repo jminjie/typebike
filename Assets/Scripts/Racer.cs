@@ -41,6 +41,11 @@ public class Racer : MonoBehaviour
     private List<Wall> walls;
 
     public Floor floor;
+    public GameHandler gameHandler;
+
+    private string eatenLetters;
+
+    protected int playerNum;
 
     public void AwakeBase(int x, int y)
     {
@@ -49,12 +54,21 @@ public class Racer : MonoBehaviour
         moveTimer = moveTimerMax;
         floor = GameObject.Find("Floor").GetComponent<Floor>();
         walls = new List<Wall>();
+        gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
     }
 
     public Vector2 getPosition()
     {
         return gridPosition;
     }
+
+    public void eatLetter(Letter l)
+    {
+        eatenLetters += l.getValueAndDestroy();
+        Debug.Log(this.GetType().ToString() + " has eaten letters: " + eatenLetters);
+        gameHandler.updateEatenLetters(playerNum, eatenLetters);
+    }
+
 
     // Update is called once per frame
     public void UpdateBase(

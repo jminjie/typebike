@@ -13,6 +13,8 @@ public class Floor : MonoBehaviour
     private int width;
     private int height;
 
+    private const int MAX_LETTERS = 20;
+
     void Start()
     {
         Debug.Log("Constructor for floor");
@@ -25,10 +27,14 @@ public class Floor : MonoBehaviour
 
     private void spawnLetter()
     {
+        if (letters.Count > MAX_LETTERS)
+        {
+            Debug.Log("Skip spawning letter");
+            return;
+        }
         Debug.Log("Spawning letter");
-        Vector2 letterPosition = new Vector2(Random.Range(0, width), Random.Range(0, height));
 
-        Letter letter = new Letter(letterPosition);
+        Letter letter = new Letter(width, height);
         if (letters == null )
         {
             Debug.Log("letters is null");
@@ -57,15 +63,25 @@ public class Floor : MonoBehaviour
 
 
         // check if ship's position is on a letter
+        Letter removed = null;
         foreach (Letter l in letters)
         {
-            if (l.getPosition() == position)
+            if (withinRange(l.getPosition(), position))
             {
-                // ship.consumeLetter(l);
-                l.destroy();
+                racer.eatLetter(l);
+                removed = l;
             }
         }
-        
+
+        if (removed != null)
+        {
+            letters.Remove(removed);
+        }
+    }
+
+    private bool withinRange(Vector2 me, Vector2 them)
+    {
+        return System.Math.Abs(me.x - them.x) < 2 && System.Math.Abs(me.y - them.y) < 2;
     }
 
     // Update is called once per frame
