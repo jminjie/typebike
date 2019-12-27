@@ -18,7 +18,6 @@ public class Letter
     {
         Vector2 pos = new Vector2(Random.Range(0, floorWidth), Random.Range(0, floorHeight));
         isEaten = false;
-        Debug.Log("Letter is generated");
         value = "" + ALPHABET[Random.Range(0, ALPHABET.Length)];
         position = pos;
         letterGameObject = new GameObject("Letter " + value, typeof(TextMesh));

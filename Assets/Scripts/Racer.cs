@@ -106,20 +106,19 @@ public class Racer : MonoBehaviour
         float frameChange = 0.5f;
         float epsilon = 0.001f;
         float bufferCheck = frameChange - epsilon;
-
         if (wall.direction == UP)
         {
-            if (gridPosition.y > wall.startPos.y - bufferCheck && gridPosition.y < wall.startPos.y + bufferCheck)
+            if (gridPosition.y > wall.startPos.y - bufferCheck && gridPosition.y < wall.endPos.y + bufferCheck)
             {
-                return System.Math.Abs(gridPosition.x - wall.startPos.x) < bufferCheck;
+                return System.Math.Abs(gridPosition.x - wall.startPos.x) < 1.0f;
             }
             return false;
         }
         if (wall.direction == DOWN)
         {
-            if (gridPosition.y < wall.startPos.y + bufferCheck && gridPosition.y > wall.startPos.y - bufferCheck)
+            if (gridPosition.y < wall.startPos.y + bufferCheck && gridPosition.y > wall.endPos.y - bufferCheck)
             {
-                return System.Math.Abs(gridPosition.x - wall.startPos.x) < bufferCheck;
+                return System.Math.Abs(gridPosition.x - wall.startPos.x) < 1.0f;
             }
             return false;
         }
@@ -127,7 +126,7 @@ public class Racer : MonoBehaviour
         {
             if (gridPosition.x < wall.startPos.x + bufferCheck && gridPosition.x > wall.endPos.x-bufferCheck)
             {
-                return System.Math.Abs(gridPosition.y - wall.startPos.y) < bufferCheck;
+                return System.Math.Abs(gridPosition.y - wall.startPos.y) < 1.0f;
             }
             return false;
         }
@@ -135,7 +134,7 @@ public class Racer : MonoBehaviour
         {
             if (gridPosition.x > wall.startPos.x - bufferCheck && gridPosition.x < wall.endPos.x+bufferCheck)
             {
-                return System.Math.Abs(gridPosition.y - wall.startPos.y) < bufferCheck;
+                return System.Math.Abs(gridPosition.y - wall.startPos.y) < 1.0f;
             }
             return false;
         }
