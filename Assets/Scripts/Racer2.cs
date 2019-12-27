@@ -8,8 +8,8 @@ public class Racer2 : Racer
     void Awake()
     {
         base.AwakeBase(
-            /*x=*/50,
-            /*y=*/50,
+            /*x=*/Floor.WIDTH/3*2,
+            /*y=*/Floor.HEIGHT/3,
             /*otherRacerString=*/"Racer1",
             Color.yellow);
         playerNum = 2;

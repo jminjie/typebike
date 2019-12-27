@@ -33,10 +33,10 @@ public class Racer : MonoBehaviour
     private float moveTimerMax;
 
 
-    private static int UP = 0;
-    private static int DOWN = 1;
-    private static int LEFT = 2;
-    private static int RIGHT = 3;
+    private const int UP = 0;
+    private const int DOWN = 1;
+    private const int LEFT = 2;
+    private const int RIGHT = 3;
 
     private int currentDirection = UP;
     private float velocity = 50.0f;
@@ -150,16 +150,22 @@ public class Racer : MonoBehaviour
                 Debug.Log("wall start " + wall.startPos.x + "," + wall.startPos.y);
                 Debug.Log("wall end " + wall.endPos.x + "," + wall.endPos.y);
                 Debug.Log("racer pos " + gridPosition.x + "," + gridPosition.y);
-                Destroy(gameObject);
+                destroyTheRacer();
             }
         }
         foreach (Wall wall in otherRacer.GetWalls())
         {
             if (CollidesWithWall(wall))
             {
-                Destroy(gameObject);
+                destroyTheRacer();
             }
         }
+    }
+
+    public void destroyTheRacer()
+    {
+        gameHandler.racerDied(playerNum);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
@@ -211,12 +217,18 @@ public class Racer : MonoBehaviour
             // Update own wall
             HandleWall(wallKeyPressed, currentDirection);
 
+            // Wall key also triggers word submit
+            if (wallKeyPressed)
+            {
+                int points = wordSubmitter.submitWord();
+                gameHandler.addPoints(playerNum, points);
+                gameHandler.updateEatenLetters(playerNum, "");
+            }
+
             // Check collisions with own or other racers walls
             CheckCollisionsWithWalls();
         }
     }
-
-
 
     private void StartWall()
     {

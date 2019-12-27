@@ -5,18 +5,19 @@ using UnityEngine.UI;
 
 public class Letter
 {
+    private static Color letterColor = Color.red;
+    private const string ALPHABET = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRRSSSSTTTTTTUUUUVVWXYYZ";
+
     private Vector2 position;
     private GameObject letterGameObject;
-
     private string value;
-
     private bool isEaten;
 
-    private static string ALPHABET = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRRSSSSTTTTTTUUUUVVWXYYZ";
 
     public Letter(int floorWidth, int floorHeight)
     {
-        Vector2 pos = new Vector2(Random.Range(0, floorWidth), Random.Range(0, floorHeight));
+        int edgeBuffer = 5;
+        Vector2 pos = new Vector2(Random.Range(0+edgeBuffer, floorWidth-edgeBuffer), Random.Range(0+edgeBuffer, floorHeight-edgeBuffer));
         isEaten = false;
         value = "" + ALPHABET[Random.Range(0, ALPHABET.Length)];
         position = pos;
@@ -25,6 +26,7 @@ public class Letter
         letterGameObject.transform.localScale += new Vector3(2, 2);
         TextMesh mesh = letterGameObject.GetComponent<TextMesh>();
         mesh.text = value;
+        mesh.color = letterColor;
         mesh.alignment = TextAlignment.Center;
         mesh.anchor = TextAnchor.MiddleCenter;
 

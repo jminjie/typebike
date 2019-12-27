@@ -4,25 +4,27 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
+    // board dimensions
+    public const int WIDTH = 150;
+    public const int HEIGHT = 100;
 
-    private float spawnTime;
-    private float maxSpawnTime;
+    // num letters at once
+    private const int MAX_LETTERS = 20;
+
+    // spawn time between letters
+    private const float MAX_LETTER_SPAWN_TIME = 2f;
+
+    // range to count a letter collision
+    private const int LETTER_COLLISION_RANGE = 2;
 
     private List<Letter> letters;
-
-    private int width;
-    private int height;
-
-    private const int MAX_LETTERS = 20;
+    private float spawnTime;
 
     void Start()
     {
         Debug.Log("Constructor for floor");
-        width = 100;
-        height = 100;
         letters = new List<Letter>();
-        maxSpawnTime = 2f;
-        spawnTime = maxSpawnTime;
+        spawnTime = MAX_LETTER_SPAWN_TIME;
     }
 
     private void spawnLetter()
@@ -33,7 +35,7 @@ public class Floor : MonoBehaviour
             return;
         }
 
-        Letter letter = new Letter(width, height);
+        Letter letter = new Letter(WIDTH, HEIGHT);
         if (letters == null )
         {
             Debug.Log("letters is null");
@@ -46,7 +48,7 @@ public class Floor : MonoBehaviour
     }
 
     public bool OutOfBounds(Vector2 position) {
-        if (position.x < 0 || position.x > width || position.y < 0 || position.y > height) {
+        if (position.x < 0 || position.x > WIDTH || position.y < 0 || position.y > HEIGHT) {
             return true;
         }
         return false;
@@ -57,7 +59,7 @@ public class Floor : MonoBehaviour
         Vector2 position = racer.getPosition();
         // check if ship's position is on the outer rim (destroy ship)
         if (OutOfBounds(position)) {
-            Destroy(racer);
+            racer.destroyTheRacer();
         }
 
 
@@ -80,14 +82,14 @@ public class Floor : MonoBehaviour
 
     private bool withinRange(Vector2 me, Vector2 them)
     {
-        return System.Math.Abs(me.x - them.x) < 2 && System.Math.Abs(me.y - them.y) < 2;
+        return System.Math.Abs(me.x - them.x) < LETTER_COLLISION_RANGE && System.Math.Abs(me.y - them.y) < LETTER_COLLISION_RANGE;
     }
 
     // Update is called once per frame
     void Update()
     {
         spawnTime += Time.deltaTime;
-        if (spawnTime >= maxSpawnTime)
+        if (spawnTime >= MAX_LETTER_SPAWN_TIME)
         {
             spawnLetter();
             spawnTime = 0;

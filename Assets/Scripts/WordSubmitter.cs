@@ -7,6 +7,14 @@ public class WordSubmitter
 
     private static HashSet<string> dict;
 
+    private const string ONE_POINT = "AEIOULNSTR";
+    private const string TWO_POINT = "DG";
+    private const string THREE_POINT = "BCMP";
+    private const string FOUR_POINT = "FHVWY";
+    private const string FIVE_POINT = "K";
+    private const string EIGHT_POINT = "JX";
+    private const string TEN_POINT = "QZ";
+
     public static void initDict()
     {
         if (dict == null) {
@@ -42,8 +50,36 @@ public class WordSubmitter
 
     private int evaluatePoints()
     {
-        // TODO use scrabble logic or something similar
-        return currentWord.Length;
+        // use scrabble logic
+        int total = 0;
+        foreach (char l in currentWord) {
+            string letter = l.ToString();
+            if (ONE_POINT.Contains(letter)) {
+                total += 1;
+            } else if (TWO_POINT.Contains(letter))
+            {
+                total += 2;
+            } else if (THREE_POINT.Contains(letter))
+            {
+                total += 3;
+            } else if (FOUR_POINT.Contains(letter))
+            {
+                total += 4;
+            } else if (FIVE_POINT.Contains(letter))
+            {
+                total += 5;
+            } else if (EIGHT_POINT.Contains(letter))
+            {
+                total += 8;
+            } else if (TEN_POINT.Contains(letter))
+            {
+                total += 10;
+            } else
+            {
+                Debug.Log("Unexpected letter=" + letter);
+            }
+        }
+        return total;
     }
 
     public bool isValidWord()
