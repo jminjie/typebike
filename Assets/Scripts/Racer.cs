@@ -12,11 +12,15 @@ public class Wall
 
     public Wall(Racer racer, int direction)
     {
-        this.startPos = racer.BackOfRacer();
-        this.endPos = racer.BackOfRacer();
+        this.startPos = racer.BackOfRacer(direction);
+        this.endPos = racer.BackOfRacer(direction);
         this.direction = direction;
         Debug.Log("create primitive called");
         wallGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Material material = new Material(Shader.Find("Unlit/Color"));
+        material.color = racer.GetColor();
+        var renderer = wallGameObject.GetComponent<MeshRenderer>();
+        renderer.material = material;
         wallGameObject.transform.position = new Vector3(startPos.x, startPos.y, 0);
     }
 }
@@ -47,34 +51,36 @@ public class Racer : MonoBehaviour
     private WordSubmitter wordSubmitter;
 
     protected int playerNum;
+    private Color color;
 
-    public void AwakeBase(int x, int y, string otherRacerString)
+    public void AwakeBase(int x, int y, string otherRacerString, Color color)
     {
         gridPosition = new Vector2(x, y);
-        moveTimerMax = 1f/60f;
+        moveTimerMax = 1f/120f;
         moveTimer = moveTimerMax;
         floor = GameObject.Find("Floor").GetComponent<Floor>();
         walls = new List<Wall>();
         gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
         otherRacer = GameObject.Find(otherRacerString).GetComponent<Racer>();
         wordSubmitter = new WordSubmitter();
+        this.color = color;
     }
 
-    public Vector2 BackOfRacer()
+    public Vector2 BackOfRacer(int direction)
     {
-        if (currentDirection == UP)
+        if (direction == UP)
         {
             return new Vector2(gridPosition.x, gridPosition.y - 0.5f);
         }
-        if (currentDirection == DOWN)
+        if (direction == DOWN)
         {
             return new Vector2(gridPosition.x, gridPosition.y + 0.5f);
         }
-        if (currentDirection == LEFT)
+        if (direction == LEFT)
         {
             return new Vector2(gridPosition.x + 0.5f, gridPosition.y);
         }
-        if (currentDirection == RIGHT)
+        if (direction == RIGHT)
         {
             return new Vector2(gridPosition.x - 0.5f, gridPosition.y);
         }
@@ -85,6 +91,8 @@ public class Racer : MonoBehaviour
     {
         return gridPosition;
     }
+
+    public Color GetColor() => color;
 
     public void eatLetter(Letter l)
     {
@@ -163,19 +171,19 @@ public class Racer : MonoBehaviour
         bool rightPressed,
         bool wallKeyPressed)
     {
-        if (upPressed)
+        if (upPressed && currentDirection != DOWN)
         {
             currentDirection = UP;
         }
-        else if (downPressed)
+        else if (downPressed && currentDirection != UP)
         {
             currentDirection = DOWN;
         }
-        else if (leftPressed)
+        else if (leftPressed && currentDirection != RIGHT)
         {
             currentDirection = LEFT;
         }
-        else if (rightPressed)
+        else if (rightPressed && currentDirection != LEFT)
         {
             currentDirection = RIGHT;
         }
@@ -218,14 +226,16 @@ public class Racer : MonoBehaviour
 
     private void EndWall()
     {
-        currentWall.endPos = BackOfRacer();
+        // Need to use wall direction here instead of racer direction because
+        // racer may have already changed directions
+        currentWall.endPos = BackOfRacer(currentWall.direction);
         walls.Add(currentWall);
 
     }
 
     private void UpdateWall()
     {
-        currentWall.endPos = BackOfRacer();
+        currentWall.endPos = BackOfRacer(currentWall.direction);
         Debug.Log("updating wall");
         Vector2 diff = currentWall.endPos - currentWall.startPos;
         Vector2 avg = (currentWall.endPos + currentWall.startPos) / 2;
