@@ -17,6 +17,10 @@ public class Wall
         this.direction = direction;
         Debug.Log("create primitive called");
         wallGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Material material = new Material(Shader.Find("Unlit/Color"));
+        material.color = racer.GetColor();
+        var renderer = wallGameObject.GetComponent<MeshRenderer>();
+        renderer.material = material;
         wallGameObject.transform.position = new Vector3(startPos.x, startPos.y, 0);
     }
 }
@@ -47,8 +51,9 @@ public class Racer : MonoBehaviour
     private string eatenLetters;
 
     protected int playerNum;
+    private Color color;
 
-    public void AwakeBase(int x, int y, string otherRacerString)
+    public void AwakeBase(int x, int y, string otherRacerString, Color color)
     {
         gridPosition = new Vector2(x, y);
         moveTimerMax = 1f/60f;
@@ -57,6 +62,7 @@ public class Racer : MonoBehaviour
         walls = new List<Wall>();
         gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
         otherRacer = GameObject.Find(otherRacerString).GetComponent<Racer>();
+        this.color = color;
     }
 
     public Vector2 BackOfRacer()
@@ -84,6 +90,8 @@ public class Racer : MonoBehaviour
     {
         return gridPosition;
     }
+
+    public Color GetColor() => color;
 
     public void eatLetter(Letter l)
     {

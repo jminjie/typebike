@@ -10,7 +10,8 @@ public class Racer2 : Racer
         base.AwakeBase(
             /*x=*/50,
             /*y=*/50,
-            /*otherRacerString=*/"Racer1");
+            /*otherRacerString=*/"Racer1",
+            Color.yellow);
         playerNum = 2;
     }
 
