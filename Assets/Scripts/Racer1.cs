@@ -7,7 +7,10 @@ public class Racer1 : Racer
     // Start is called before the first frame update
     void Awake()
     {
-        base.AwakeBase(5,6);
+        base.AwakeBase(
+            /*x=*/5,
+            /*y=*/6,
+            /*otherRacerString=*/"Racer2");
         playerNum = 1;
     }
 

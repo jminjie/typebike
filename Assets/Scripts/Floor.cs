@@ -32,7 +32,6 @@ public class Floor : MonoBehaviour
             Debug.Log("Skip spawning letter");
             return;
         }
-        Debug.Log("Spawning letter");
 
         Letter letter = new Letter(width, height);
         if (letters == null )

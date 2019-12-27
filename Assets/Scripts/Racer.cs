@@ -10,16 +10,17 @@ public class Wall
     public Vector2 endPos;
     public int direction;
 
-    public Wall(Vector2 startPos, int direction)
+    public Wall(Racer racer, int direction)
     {
-        this.startPos = startPos;
-        this.endPos = startPos;
+        this.startPos = racer.BackOfRacer();
+        this.endPos = racer.BackOfRacer();
         this.direction = direction;
         Debug.Log("create primitive called");
         wallGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
         wallGameObject.transform.position = new Vector3(startPos.x, startPos.y, 0);
     }
 }
+
 
 public class Racer : MonoBehaviour
 {
@@ -39,7 +40,7 @@ public class Racer : MonoBehaviour
     private bool currentlyWalling = false;
     private Wall currentWall;
     private List<Wall> walls;
-
+    private Racer otherRacer;
     public Floor floor;
     public GameHandler gameHandler;
 
@@ -47,7 +48,7 @@ public class Racer : MonoBehaviour
 
     protected int playerNum;
 
-    public void AwakeBase(int x, int y)
+    public void AwakeBase(int x, int y, string otherRacerString)
     {
         gridPosition = new Vector2(x, y);
         moveTimerMax = 1f/60f;
@@ -55,6 +56,28 @@ public class Racer : MonoBehaviour
         floor = GameObject.Find("Floor").GetComponent<Floor>();
         walls = new List<Wall>();
         gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
+        otherRacer = GameObject.Find(otherRacerString).GetComponent<Racer>();
+    }
+
+    public Vector2 BackOfRacer()
+    {
+        if (currentDirection == UP)
+        {
+            return new Vector2(gridPosition.x, gridPosition.y - 0.5f);
+        }
+        if (currentDirection == DOWN)
+        {
+            return new Vector2(gridPosition.x, gridPosition.y + 0.5f);
+        }
+        if (currentDirection == LEFT)
+        {
+            return new Vector2(gridPosition.x + 0.5f, gridPosition.y);
+        }
+        if (currentDirection == RIGHT)
+        {
+            return new Vector2(gridPosition.x - 0.5f, gridPosition.y);
+        }
+        return new Vector2(gridPosition.x, gridPosition.y);
     }
 
     public Vector2 getPosition()
@@ -68,7 +91,69 @@ public class Racer : MonoBehaviour
         Debug.Log(this.GetType().ToString() + " has eaten letters: " + eatenLetters);
         gameHandler.updateEatenLetters(playerNum, eatenLetters);
     }
+    public List<Wall> GetWalls() => walls;
 
+    bool CollidesWithWall(Wall wall)
+    {
+        float frameChange = 0.5f;
+        float epsilon = 0.001f;
+        float bufferCheck = frameChange - epsilon;
+
+        if (wall.direction == UP)
+        {
+            if (gridPosition.y > wall.startPos.y - bufferCheck && gridPosition.y < wall.startPos.y + bufferCheck)
+            {
+                return System.Math.Abs(gridPosition.x - wall.startPos.x) < bufferCheck;
+            }
+            return false;
+        }
+        if (wall.direction == DOWN)
+        {
+            if (gridPosition.y < wall.startPos.y + bufferCheck && gridPosition.y > wall.startPos.y - bufferCheck)
+            {
+                return System.Math.Abs(gridPosition.x - wall.startPos.x) < bufferCheck;
+            }
+            return false;
+        }
+        if (wall.direction == LEFT)
+        {
+            if (gridPosition.x < wall.startPos.x + bufferCheck && gridPosition.x > wall.endPos.x-bufferCheck)
+            {
+                return System.Math.Abs(gridPosition.y - wall.startPos.y) < bufferCheck;
+            }
+            return false;
+        }
+        if (wall.direction == RIGHT)
+        {
+            if (gridPosition.x > wall.startPos.x - bufferCheck && gridPosition.x < wall.endPos.x+bufferCheck)
+            {
+                return System.Math.Abs(gridPosition.y - wall.startPos.y) < bufferCheck;
+            }
+            return false;
+        }
+        return false;
+    }
+    private void CheckCollisionsWithWalls()
+    {
+        foreach (Wall wall in GetWalls())
+        {
+
+            if (CollidesWithWall(wall))
+            {
+                Debug.Log("wall start " + wall.startPos.x + "," + wall.startPos.y);
+                Debug.Log("wall end " + wall.endPos.x + "," + wall.endPos.y);
+                Debug.Log("racer pos " + gridPosition.x + "," + gridPosition.y);
+                Destroy(gameObject);
+            }
+        }
+        foreach (Wall wall in otherRacer.GetWalls())
+        {
+            if (CollidesWithWall(wall))
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
 
     // Update is called once per frame
     public void UpdateBase(
@@ -116,31 +201,48 @@ public class Racer : MonoBehaviour
             transform.position = new Vector3(gridPosition.x, gridPosition.y);
             moveTimer = 0;
             floor.shipMoved(this);
+            // Update own wall
             HandleWall(wallKeyPressed, currentDirection);
+
+            // Check collisions with own or other racers walls
+            CheckCollisionsWithWalls();
         }
     }
 
-    private void StartWall(Vector2 startPos, int direction)
+
+
+    private void StartWall()
     {
-        currentWall = new Wall(startPos, direction);
-        Debug.Log("starting wall at " + startPos.x + "," + startPos.y);
+        currentWall = new Wall(this, currentDirection);
     }
 
-    private void EndWall(Vector2 endPos)
+    private void EndWall()
     {
-        currentWall.endPos = endPos;
-        Debug.Log("ending wall at " + endPos.x + "," + endPos.y);
+        currentWall.endPos = BackOfRacer();
         walls.Add(currentWall);
 
     }
 
-    private void UpdateWall(Vector2 curPos)
+    private void UpdateWall()
     {
-        currentWall.endPos = curPos;
+        currentWall.endPos = BackOfRacer();
         Debug.Log("updating wall");
-        //currentWall.wallGameObject.transform.position = new Vector3(curPos.x, curPos.y, 0);
-        Vector2 diff = curPos - currentWall.startPos;
-        Vector2 avg = (curPos + currentWall.startPos) / 2;
+        Vector2 diff = currentWall.endPos - currentWall.startPos;
+        Vector2 avg = (currentWall.endPos + currentWall.startPos) / 2;
+        if (currentWall.direction == UP || currentWall.direction == DOWN)
+        {
+            currentWall.wallGameObject.transform.localScale = new Vector3(
+                1,
+                System.Math.Abs(diff.y),
+                1);
+        } else
+        {
+            currentWall.wallGameObject.transform.localScale = new Vector3(
+                System.Math.Abs(diff.x),
+                1,
+                1);
+
+        }
         currentWall.wallGameObject.transform.localScale = new Vector3(
             System.Math.Max(1, System.Math.Abs(diff.x)),
             System.Math.Max(1, System.Math.Abs(diff.y)),
@@ -157,14 +259,14 @@ public class Racer : MonoBehaviour
         if (!currentlyWalling && wallKeyPressed)
         {
             currentlyWalling = true;
-            StartWall(gridPosition, curDirection);
+            StartWall();
             return;
         }
         if (currentlyWalling && !wallKeyPressed)
         {
             currentlyWalling = false;
             Debug.Log("ending because wall key not pressed");
-            EndWall(gridPosition);
+            EndWall();
             return;
         }
         if (currentlyWalling && wallKeyPressed)
@@ -173,12 +275,12 @@ public class Racer : MonoBehaviour
             if (curDirection != currentWall.direction)
             {
                 Debug.Log("ending because changed direction");
-                EndWall(gridPosition);
-                StartWall(gridPosition, curDirection);
+                EndWall();
+                StartWall();
                 return;
             } else
             {
-                UpdateWall(gridPosition);
+                UpdateWall();
                 return;
             }
         }
