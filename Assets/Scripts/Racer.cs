@@ -44,7 +44,7 @@ public class Racer : MonoBehaviour
     public Floor floor;
     public GameHandler gameHandler;
 
-    private string eatenLetters;
+    private WordSubmitter wordSubmitter;
 
     protected int playerNum;
 
@@ -57,6 +57,7 @@ public class Racer : MonoBehaviour
         walls = new List<Wall>();
         gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
         otherRacer = GameObject.Find(otherRacerString).GetComponent<Racer>();
+        wordSubmitter = new WordSubmitter();
     }
 
     public Vector2 BackOfRacer()
@@ -87,9 +88,8 @@ public class Racer : MonoBehaviour
 
     public void eatLetter(Letter l)
     {
-        eatenLetters += l.getValueAndDestroy();
-        Debug.Log(this.GetType().ToString() + " has eaten letters: " + eatenLetters);
-        gameHandler.updateEatenLetters(playerNum, eatenLetters);
+        wordSubmitter.addLetter(l.getValueAndDestroy());
+        gameHandler.updateEatenLetters(playerNum, wordSubmitter.getWord()) ;
     }
     public List<Wall> GetWalls() => walls;
 
