@@ -56,7 +56,7 @@ public class Racer : MonoBehaviour
     public void AwakeBase(int x, int y, string otherRacerString, Color color)
     {
         gridPosition = new Vector2(x, y);
-        moveTimerMax = 1f/120f;
+        moveTimerMax = 1f/60f;
         moveTimer = moveTimerMax;
         floor = GameObject.Find("Floor").GetComponent<Floor>();
         walls = new List<Wall>();
