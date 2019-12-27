@@ -14,6 +14,7 @@ public class GameHandler : MonoBehaviour
     {
         player1Letters = "PLAYER 1:";
         player1Letters = "PLAYER 2:";
+        WordSubmitter.initDict();
     }
 
     public void updateEatenLetters(int playerNum, string letters)
