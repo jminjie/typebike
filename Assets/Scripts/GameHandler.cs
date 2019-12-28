@@ -70,6 +70,7 @@ public class GameHandler : MonoBehaviour
         }
         TextMesh mesh = GetComponent<TextMesh>();
         mesh.text = "PLAYER " + playerNum + " WINS\n SCORE: " + player1Points + " - " + player2Points + "\nPress 'r' to restart";
+        gameIsOver = true;
     }
 
     public void racerDied(int playerWhoDied)
@@ -99,6 +100,10 @@ public class GameHandler : MonoBehaviour
 
     private void updateGameInfo()
     {
+        if (gameIsOver)
+        {
+            return;
+        }
         TextMesh mesh = GetComponent<TextMesh>();
         mesh.text = player1Letters + "\n" + player2Letters
             + "\n SCORE: " + player1Points + " - " + player2Points;

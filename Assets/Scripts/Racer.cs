@@ -196,6 +196,11 @@ public class Racer : MonoBehaviour
 
     private void ActivateBoost()
     {
+        if (gameHandler.getPoints(playerNum) < 1)
+        {
+            Debug.Log("not enough points");
+            return;
+        }
         gameHandler.addPoints(playerNum, -1);
         SetRacerColor(Color.red);
         activateBoostTime = Time.time;
@@ -215,11 +220,6 @@ public class Racer : MonoBehaviour
         if (dir > 3 || dir < 0)
         {
             Debug.Log("unexpected direction=" + 3);
-            return;
-        }
-        if (gameHandler.getPoints(playerNum) < 1)
-        {
-            Debug.Log("not enough points");
             return;
         }
 
