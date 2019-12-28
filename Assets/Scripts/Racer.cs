@@ -52,7 +52,7 @@ public class Racer : MonoBehaviour
     private const int RIGHT = 3;
 
     private int currentDirection = UP;
-    private const float ORIGINAL_VELOCITY = 50.0f;
+    private const float ORIGINAL_VELOCITY = 60.0f;
     private float velocity = ORIGINAL_VELOCITY;
 
     private bool currentlyWalling = false;
@@ -208,7 +208,7 @@ public class Racer : MonoBehaviour
         gameHandler.addPoints(playerNum, -1);
         SetRacerColor(Color.red);
         activateBoostTime = Time.time;
-        velocity = 80f;
+        velocity = ORIGINAL_VELOCITY * 1.6f;
     }
 
     private void EndBoost()
@@ -304,6 +304,16 @@ public class Racer : MonoBehaviour
             gameHandler.addPoints(playerNum, -1);
         }
 
+        if (submitKeyPressed)
+        {
+            int points = wordSubmitter.submitWord();
+            gameHandler.addPoints(playerNum, points);
+            gameHandler.updateEatenLetters(playerNum, "");
+        }
+
+        // Update own wall
+        HandleWall(wallKeyPressed, currentDirection);
+
         moveTimer += Time.deltaTime;
         if (moveTimer >= moveTimerMax) {
             if (currentDirection == UP)
@@ -325,16 +335,6 @@ public class Racer : MonoBehaviour
             transform.position = new Vector3(gridPosition.x, gridPosition.y);
             moveTimer = 0;
             floor.shipMoved(this);
-            // Update own wall
-            HandleWall(wallKeyPressed, currentDirection);
-
-            // Wall key also triggers word submit
-            if (submitKeyPressed)
-            {
-                int points = wordSubmitter.submitWord();
-                gameHandler.addPoints(playerNum, points);
-                gameHandler.updateEatenLetters(playerNum, "");
-            }
 
             // Check collisions with own or other racers walls
             CheckCollisionsWithWalls();

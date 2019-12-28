@@ -25,6 +25,11 @@ public class Floor : MonoBehaviour
         Debug.Log("Constructor for floor");
         letters = new List<Letter>();
         spawnTime = MAX_LETTER_SPAWN_TIME;
+
+        for (int i = 0; i < 5; i++)
+        {
+            spawnLetter();
+        }
     }
 
     private void spawnLetter()
