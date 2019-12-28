@@ -6,6 +6,7 @@ Made with Unity3D. See the game [here](https://www.youtube.com/watch?v=Rmqah9-04
 
 ## Rules of the game
 Player 1 - Arrow keys to move, ' key to submit/clear word, enter key to start/stop wall.
+
 Player 2 - WASD to move, C key to submit/clear word, space bar to start/stop wall.
 
 Words are scored and letters are generated using the Scrabble distribution.
