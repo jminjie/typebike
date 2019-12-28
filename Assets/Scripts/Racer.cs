@@ -179,6 +179,11 @@ public class Racer : MonoBehaviour
                 destroyTheRacer();
             }
         }
+        // TODO: merge this logic with above loop
+        if (CollidesWithWall(otherRacer.currentWall))
+        {
+            destroyTheRacer();
+        }
     }
 
     public void destroyTheRacer()
@@ -363,6 +368,7 @@ public class Racer : MonoBehaviour
 
     private void HandleWall(bool wallKeyPressed, int curDirection)
     {
+
         if (!currentlyWalling && !wallKeyPressed)
         {
             return;
@@ -373,16 +379,16 @@ public class Racer : MonoBehaviour
             StartWall();
             return;
         }
-        if (currentlyWalling && !wallKeyPressed)
+        if (currentlyWalling && wallKeyPressed)
         {
             currentlyWalling = false;
             Debug.Log("ending because wall key not pressed");
             EndWall();
             return;
         }
-        if (currentlyWalling && wallKeyPressed)
+        if (currentlyWalling && !wallKeyPressed)
         {
-            Debug.Log("currently walling and holding wall button");
+            Debug.Log("currently walling");
             if (curDirection != currentWall.direction)
             {
                 Debug.Log("ending because changed direction");
