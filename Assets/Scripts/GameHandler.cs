@@ -51,6 +51,17 @@ public class GameHandler : MonoBehaviour
         updateGameInfo();
     }
 
+    public int getPoints(int playerNum)
+    {
+        if (playerNum == 1)
+        {
+            return player1Points;
+        } else
+        {
+            return player2Points;
+        }
+    }
+
     private void setWin(int playerNum)
     {
         if (gameIsOver)
