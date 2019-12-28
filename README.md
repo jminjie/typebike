@@ -1,5 +1,4 @@
 # Typebyke
-
 Typebyke is a tron-like game where players gather letters to build words which allow them to boost their speed and make walls.
 
 Made with Unity3D. See the game [here](https://www.youtube.com/watch?v=Rmqah9-04WE).
@@ -23,4 +22,4 @@ Double tap a direction to boost in that direction. Boosting costs 1 point.
 The game ends when a player dies or reaches 30 points.
 
 ## Playable demo
-Available soon.
+Available [here](https://jminjie.github.io/typebyke-demo/).
