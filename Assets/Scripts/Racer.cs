@@ -37,8 +37,10 @@ public class Racer : MonoBehaviour
 
     private const float DOUBLE_TAP_TIME = 0.5f;
     private const float BOOST_DURATION = 0.5f;
+    private const float WALL_POINT_DURATION = 1f;
 
     private float activateBoostTime;
+    private float wallingStartTime;
 
     private const int UP = 0;
     private const int DOWN = 1;
@@ -287,6 +289,15 @@ public class Racer : MonoBehaviour
         {
             EndBoost();
         }
+        if (currentlyWalling && wallingStartTime + WALL_POINT_DURATION < Time.time)
+        {
+            if (gameHandler.getPoints(playerNum) == 1)
+            {
+                EndWall();
+            }
+            wallingStartTime = Time.time;
+            gameHandler.addPoints(playerNum, -1);
+        }
 
         moveTimer += Time.deltaTime;
         if (moveTimer >= moveTimerMax) {
@@ -327,11 +338,13 @@ public class Racer : MonoBehaviour
 
     private void StartWall()
     {
+        currentlyWalling = true;
         currentWall = new Wall(this, currentDirection);
     }
 
     private void EndWall()
     {
+        currentlyWalling = false;
         // Need to use wall direction here instead of racer direction because
         // racer may have already changed directions
         currentWall.endPos = BackOfRacer(currentWall.direction);
@@ -368,20 +381,23 @@ public class Racer : MonoBehaviour
 
     private void HandleWall(bool wallKeyPressed, int curDirection)
     {
-
         if (!currentlyWalling && !wallKeyPressed)
         {
             return;
         }
         if (!currentlyWalling && wallKeyPressed)
         {
-            currentlyWalling = true;
+            if (gameHandler.getPoints(playerNum) < 1) {
+                Debug.Log("not creating wall because player has no points");
+                return;
+            }
+            gameHandler.addPoints(playerNum, -1);
+            wallingStartTime = Time.time;
             StartWall();
             return;
         }
         if (currentlyWalling && wallKeyPressed)
         {
-            currentlyWalling = false;
             Debug.Log("ending because wall key not pressed");
             EndWall();
             return;
