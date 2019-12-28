@@ -260,7 +260,8 @@ public class Racer : MonoBehaviour
         bool downPressed,
         bool leftPressed,
         bool rightPressed,
-        bool wallKeyPressed)
+        bool wallKeyPressed,
+        bool submitKeyPressed)
     {
         if (upPressed && currentDirection != DOWN)
         {
@@ -313,7 +314,7 @@ public class Racer : MonoBehaviour
             HandleWall(wallKeyPressed, currentDirection);
 
             // Wall key also triggers word submit
-            if (wallKeyPressed)
+            if (submitKeyPressed)
             {
                 int points = wordSubmitter.submitWord();
                 gameHandler.addPoints(playerNum, points);
