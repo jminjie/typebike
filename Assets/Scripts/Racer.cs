@@ -182,7 +182,7 @@ public class Racer : MonoBehaviour
             }
         }
         // TODO: merge this logic with above loop
-        if (CollidesWithWall(otherRacer.currentWall))
+        if (otherRacer.currentWall != null && CollidesWithWall(otherRacer.currentWall))
         {
             destroyTheRacer();
         }
