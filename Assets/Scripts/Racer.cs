@@ -30,7 +30,7 @@ public class Racer : MonoBehaviour
 {
 
     // enable walls and boost without points
-    private const bool GODMODE = false;
+    private bool GODMODE = false;
 
     private Vector2 gridPosition;
     private float moveTimer;
@@ -61,7 +61,7 @@ public class Racer : MonoBehaviour
     private Racer otherRacer;
     public Floor floor;
     public GameHandler gameHandler;
-
+    
     private WordSubmitter wordSubmitter;
 
     protected int playerNum;
@@ -200,7 +200,8 @@ public class Racer : MonoBehaviour
 
     private void ActivateBoost()
     {
-        if (!GODMODE && (gameHandler.getPoints(playerNum) < 1))
+        int points = gameHandler.getPoints(playerNum);
+        if (!GODMODE && (points < 1))
         {
             Debug.Log("not enough points");
             return;
@@ -209,6 +210,10 @@ public class Racer : MonoBehaviour
         SetRacerColor(Color.red);
         activateBoostTime = Time.time;
         velocity = ORIGINAL_VELOCITY * 1.6f;
+        if (points < 1)
+        {
+            EndWall();
+        }
     }
 
     private void EndBoost()
@@ -294,16 +299,7 @@ public class Racer : MonoBehaviour
         {
             EndBoost();
         }
-        if (currentlyWalling && wallingStartTime + WALL_POINT_DURATION < Time.time)
-        {
-            if (gameHandler.getPoints(playerNum) <= 1)
-            {
-                EndWall();
-            }
-            wallingStartTime = Time.time;
-            gameHandler.addPoints(playerNum, -1);
-        }
-
+        
         if (submitKeyPressed)
         {
             int points = wordSubmitter.submitWord();
@@ -338,6 +334,21 @@ public class Racer : MonoBehaviour
 
             // Check collisions with own or other racers walls
             CheckCollisionsWithWalls();
+        }
+
+
+        if (currentlyWalling && wallingStartTime + WALL_POINT_DURATION < Time.time)
+        {
+            int points = gameHandler.getPoints(playerNum);
+            if (points <= 1)
+            {
+                EndWall();
+            }
+            wallingStartTime = Time.time;
+            if (points > 0)
+            {
+                gameHandler.addPoints(playerNum, -1);
+            }
         }
     }
 

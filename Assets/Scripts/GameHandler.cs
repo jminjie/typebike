@@ -5,13 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-
-    private Floor floor;
-
     private string player1Letters;
     private string player2Letters;
     private int player1Points;
     private int player2Points;
+    private string bestWord;
+    private int bestWordPoints;
 
     private bool gameIsOver;
 
@@ -26,6 +25,20 @@ public class GameHandler : MonoBehaviour
         player1Points = 0;
         player2Points = 0;
         WordSubmitter.initDict();
+        resetBestWord();
+    }
+
+    private void resetBestWord()
+    {
+        bestWord = "";
+        bestWordPoints = 0;
+    }
+
+    public void setBestWord(string word, int points)
+    {
+        bestWord = word;
+        bestWordPoints = points;
+        updateGameInfo();
     }
 
     public void updateEatenLetters(int playerNum, string letters)
@@ -69,7 +82,11 @@ public class GameHandler : MonoBehaviour
             return;
         }
         TextMesh mesh = GetComponent<TextMesh>();
-        mesh.text = "PLAYER " + playerNum + " WINS\n SCORE: " + player1Points + " - " + player2Points + "\nPress 'r' to restart";
+        mesh.text = "BEST WORD:\n" + bestWord;
+        if (bestWord != "") {
+            mesh.text += " (" + bestWordPoints + ")";
+        }
+        mesh.text += "\nPLAYER " + playerNum + " WINS\n SCORE: " + player1Points + " - " + player2Points + "\nPress 'r' to restart";
         gameIsOver = true;
     }
 
@@ -105,7 +122,7 @@ public class GameHandler : MonoBehaviour
             return;
         }
         TextMesh mesh = GetComponent<TextMesh>();
-        mesh.text = player1Letters + "\n" + player2Letters
+        mesh.text = "BEST WORD:\n" + bestWord + " (" + bestWordPoints + ")\n" + player1Letters + "\n" + player2Letters
             + "\n SCORE: " + player1Points + " - " + player2Points;
     }
 
@@ -114,7 +131,7 @@ public class GameHandler : MonoBehaviour
     {
         if (gameIsOver && Input.GetKeyDown(KeyCode.R))
         {
-             SceneManager.LoadScene( SceneManager.GetActiveScene().name );
-        }      
+            SceneManager.LoadScene( SceneManager.GetActiveScene().name );
+        }
     }
 }

@@ -1,12 +1,10 @@
 ﻿<Properties StartupConfiguration="{A13D1A58-49CF-6C5C-FD58-85C8BD53ECD2}|">
-  <MonoDevelop.Ide.ItemProperties.NewAssembly PreferredExecutionTarget="c75b47a8-f495-4966-8a4a-cae2321d1310" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Racer.cs">
+  <MonoDevelop.Ide.ItemProperties.NewAssembly PreferredExecutionTarget="de18ef66-17d5-4f82-ae24-e6c17704337b" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/WordSubmitter.cs">
     <Files>
-      <File FileName="Assets/Scripts/GameHandler.cs" Line="121" Column="1" />
-      <File FileName="Assets/Scripts/Racer.cs" Line="55" Column="46" />
-      <File FileName="Assets/Scripts/Racer1.cs" Line="31" Column="1" />
-      <File FileName="Assets/Scripts/Racer2.cs" Line="30" Column="1" />
-      <File FileName="Assets/Scripts/Letter.cs" />
+      <File FileName="Assets/Scripts/GameHandler.cs" Line="134" Column="1" />
+      <File FileName="Assets/Scripts/Racer.cs" Line="315" Column="40" />
+      <File FileName="Assets/Scripts/WordSubmitter.cs" Line="38" Column="38" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,7 +12,7 @@
           <Node name="TypeByke" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="Racer.cs" selected="True" />
+                <Node name="WordSubmitter.cs" selected="True" />
               </Node>
             </Node>
           </Node>

@@ -15,6 +15,10 @@ public class WordSubmitter
     private const string EIGHT_POINT = "JX";
     private const string TEN_POINT = "QZ";
 
+    private static string highestScoringWord;
+    private static int highestScoringWordPoints;
+    private static GameHandler gameHandler;
+
     public static void initDict()
     {
         if (dict == null) {
@@ -29,6 +33,10 @@ public class WordSubmitter
         {
             Debug.Log("should not call initDict twice but you did so");
         }
+        gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
+        highestScoringWord = "";
+        highestScoringWordPoints = 0;
+
     }
 
     public WordSubmitter()
@@ -96,6 +104,12 @@ public class WordSubmitter
         if (isValidWord())
         {
             int points = evaluatePoints();
+            if (points > highestScoringWordPoints)
+            {
+                highestScoringWord = currentWord;
+                highestScoringWordPoints = points;
+                gameHandler.setBestWord(highestScoringWord, points);
+            }
             currentWord = "";
             return points;
         } else
