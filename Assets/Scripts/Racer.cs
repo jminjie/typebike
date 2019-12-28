@@ -160,6 +160,11 @@ public class Racer : MonoBehaviour
                 destroyTheRacer();
             }
         }
+        // TODO: merge this logic with above loop
+        if (CollidesWithWall(otherRacer.currentWall))
+        {
+            destroyTheRacer();
+        }
     }
 
     public void destroyTheRacer()
