@@ -1,12 +1,13 @@
-﻿<Properties StartupConfiguration="{BB039D9A-E43E-1963-6E31-BD65F9E3185A}|">
+﻿<Properties StartupConfiguration="{A13D1A58-49CF-6C5C-FD58-85C8BD53ECD2}|">
+  <MonoDevelop.Ide.ItemProperties.NewAssembly PreferredExecutionTarget="c75b47a8-f495-4966-8a4a-cae2321d1310" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Racer.cs">
     <Files>
       <File FileName="Assets/Scripts/GameHandler.cs" Line="43" Column="1" />
       <File FileName="Assets/Scripts/Racer.cs" Line="298" Column="1" />
-      <File FileName="Assets/Scripts/Racer1.cs" Line="14" Column="15" />
-      <File FileName="Assets/Scripts/Racer2.cs" Line="14" Column="25" />
-      <File FileName="Assets/Scripts/Floor.cs" Line="27" Column="1" />
-      <File FileName="Assets/Scripts/Letter.cs" Line="21" Column="1" />
+      <File FileName="Assets/Scripts/Racer1.cs" />
+      <File FileName="Assets/Scripts/Racer2.cs" />
+      <File FileName="Assets/Scripts/Floor.cs" />
+      <File FileName="Assets/Scripts/Letter.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
