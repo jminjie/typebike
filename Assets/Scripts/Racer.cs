@@ -28,6 +28,10 @@ public class Wall
 
 public class Racer : MonoBehaviour
 {
+
+    // enable walls and boost without points
+    private const bool GODMODE = false;
+
     private Vector2 gridPosition;
     private float moveTimer;
     private float moveTimerMax;
@@ -196,7 +200,7 @@ public class Racer : MonoBehaviour
 
     private void ActivateBoost()
     {
-        if (gameHandler.getPoints(playerNum) < 1)
+        if (!GODMODE && (gameHandler.getPoints(playerNum) < 1))
         {
             Debug.Log("not enough points");
             return;
@@ -292,7 +296,7 @@ public class Racer : MonoBehaviour
         }
         if (currentlyWalling && wallingStartTime + WALL_POINT_DURATION < Time.time)
         {
-            if (gameHandler.getPoints(playerNum) == 1)
+            if (gameHandler.getPoints(playerNum) <= 1)
             {
                 EndWall();
             }
@@ -388,7 +392,7 @@ public class Racer : MonoBehaviour
         }
         if (!currentlyWalling && wallKeyPressed)
         {
-            if (gameHandler.getPoints(playerNum) < 1) {
+            if (!GODMODE && (gameHandler.getPoints(playerNum) < 1)) {
                 Debug.Log("not creating wall because player has no points");
                 return;
             }
