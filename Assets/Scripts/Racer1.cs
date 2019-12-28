@@ -23,6 +23,6 @@ public class Racer1 : Racer
             Input.GetKeyDown(KeyCode.DownArrow),
             Input.GetKeyDown(KeyCode.LeftArrow),
             Input.GetKeyDown(KeyCode.RightArrow),
-            Input.GetKey(KeyCode.Return));
+            Input.GetKeyDown(KeyCode.Return));
     }
 }
