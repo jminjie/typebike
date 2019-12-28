@@ -32,6 +32,13 @@ public class Racer : MonoBehaviour
     private float moveTimer;
     private float moveTimerMax;
 
+    private int[] ButtonCounter;
+    private float[] ButtonCooler;
+
+    private const float DOUBLE_TAP_TIME = 0.5f;
+    private const float BOOST_DURATION = 0.5f;
+
+    private float activateBoostTime;
 
     private const int UP = 0;
     private const int DOWN = 1;
@@ -39,7 +46,8 @@ public class Racer : MonoBehaviour
     private const int RIGHT = 3;
 
     private int currentDirection = UP;
-    private float velocity = 50.0f;
+    private const float ORIGINAL_VELOCITY = 50.0f;
+    private float velocity = ORIGINAL_VELOCITY;
 
     private bool currentlyWalling = false;
     private Wall currentWall;
@@ -64,6 +72,9 @@ public class Racer : MonoBehaviour
         otherRacer = GameObject.Find(otherRacerString).GetComponent<Racer>();
         wordSubmitter = new WordSubmitter();
         this.color = color;
+        ButtonCounter = new int[]{ 0, 0, 0, 0 };
+        ButtonCooler = new float[] { DOUBLE_TAP_TIME, DOUBLE_TAP_TIME, DOUBLE_TAP_TIME, DOUBLE_TAP_TIME };
+        activateBoostTime = 0f;
     }
 
     public Vector2 BackOfRacer(int direction)
@@ -90,6 +101,14 @@ public class Racer : MonoBehaviour
     public Vector2 getPosition()
     {
         return gridPosition;
+    }
+
+    private void SetRacerColor(Color c)
+    {
+        Material material = new Material(Shader.Find("Unlit/Color"));
+        material.color = c;
+        var renderer = GetComponent<MeshRenderer>();
+        renderer.material = material;
     }
 
     public Color GetColor() => color;
@@ -173,6 +192,68 @@ public class Racer : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void ActivateBoost()
+    {
+        gameHandler.addPoints(playerNum, -1);
+        SetRacerColor(Color.red);
+        activateBoostTime = Time.time;
+        velocity = 80f;
+    }
+
+    private void EndBoost()
+    {
+        SetRacerColor(GetColor());
+        activateBoostTime = 0f;
+        velocity = ORIGINAL_VELOCITY;
+
+    }
+
+    private void HandleBoost(int dir)
+    {
+        if (dir > 3 || dir < 0)
+        {
+            Debug.Log("unexpected direction=" + 3);
+            return;
+        }
+        if (gameHandler.getPoints(playerNum) < 1)
+        {
+            Debug.Log("not enough points");
+            return;
+        }
+
+        if (ButtonCounter[dir] == 1 && ButtonCooler[dir] > 0)
+        {
+            ActivateBoost();
+        }
+        else
+        {
+            ButtonCooler[dir] = DOUBLE_TAP_TIME;
+            ButtonCounter[dir] += 1;
+
+            // clear button counter for all other directions
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == dir)
+                {
+                    continue;
+                }
+                ButtonCounter[i] = 0;
+                ButtonCooler[i] = DOUBLE_TAP_TIME;
+            }
+        }
+
+        if (ButtonCooler[dir] > 0)
+        {
+            ButtonCooler[dir] -= 1 * Time.deltaTime;
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++) {
+                ButtonCounter[i] = 0;
+            }
+        }
+    }
+
     // Update is called once per frame
     public void UpdateBase(
         bool upPressed,
@@ -183,19 +264,28 @@ public class Racer : MonoBehaviour
     {
         if (upPressed && currentDirection != DOWN)
         {
+            HandleBoost(UP);
             currentDirection = UP;
         }
         else if (downPressed && currentDirection != UP)
         {
+            HandleBoost(DOWN);
             currentDirection = DOWN;
         }
         else if (leftPressed && currentDirection != RIGHT)
         {
+            HandleBoost(LEFT);
             currentDirection = LEFT;
         }
         else if (rightPressed && currentDirection != LEFT)
         {
+            HandleBoost(RIGHT);
             currentDirection = RIGHT;
+        }
+
+        if (activateBoostTime != 0f && activateBoostTime + BOOST_DURATION < Time.time)
+        {
+            EndBoost();
         }
 
         moveTimer += Time.deltaTime;
