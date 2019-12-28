@@ -13,13 +13,10 @@ Player 2 - WASD to move, C key to submit/clear word, space bar to start/stop wal
 ![Player 1 controls](https://github.com/jminjie/typebike/blob/master/keyboard-layout.png)
 
 ## Rules of the game
-Words are scored and letters are generated using the Scrabble distribution.
-
-Making a wall costs 1 point per second.
-
-Double tap a direction to boost in that direction. Boosting costs 1 point.
-
-The game ends when a player dies or reaches 30 points.
+* Words are scored and letters are generated using the Scrabble distribution.
+* Making a wall costs 1 point per second.
+* Double tap a direction to boost in that direction. Boosting costs 1 point.
+* The game ends when a player dies or reaches 30 points.
 
 ## Playable demo
 Available [here](https://jminjie.github.io/typebyke-demo/).
