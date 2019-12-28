@@ -6,9 +6,10 @@ Made with Unity3D. See the game [here](https://www.youtube.com/watch?v=Rmqah9-04
 
 ## Controls
 Player 1 - Arrow keys to move, ' key to submit/clear word, enter key to start/stop wall.
+![Player 1 controls](https://github.com/jminjie/typebyke/raw/master/keyboard-layout-2.png")
 
 Player 2 - WASD to move, C key to submit/clear word, space bar to start/stop wall.
-
+![Player 2 controls](https://github.com/jminjie/typebyke/raw/master/keyboard-layout.png")
 ## Rules of the game
 Words are scored and letters are generated using the Scrabble distribution.
 
