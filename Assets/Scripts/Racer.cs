@@ -58,6 +58,7 @@ public class Racer : MonoBehaviour
     private bool currentlyWalling = false;
     private Wall currentWall;
     private List<Wall> walls;
+    private List<PointsDisplay> pointsDisplays;
     private Racer otherRacer;
     public Floor floor;
     public GameHandler gameHandler;
@@ -74,6 +75,7 @@ public class Racer : MonoBehaviour
         moveTimer = moveTimerMax;
         floor = GameObject.Find("Floor").GetComponent<Floor>();
         walls = new List<Wall>();
+        pointsDisplays = new List<PointsDisplay>();
         gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
         otherRacer = GameObject.Find(otherRacerString).GetComponent<Racer>();
         wordSubmitter = new WordSubmitter();
@@ -119,7 +121,7 @@ public class Racer : MonoBehaviour
 
     public Color GetColor() => color;
 
-    public void eatLetter(Letter l)
+    public void EatLetter(Letter l)
     {
         wordSubmitter.addLetter(l.getValueAndDestroy());
         gameHandler.updateEatenLetters(playerNum, wordSubmitter.getWord()) ;
@@ -302,10 +304,16 @@ public class Racer : MonoBehaviour
         
         if (submitKeyPressed)
         {
-            int points = wordSubmitter.submitWord();
-            gameHandler.addPoints(playerNum, points);
-            gameHandler.updateEatenLetters(playerNum, "");
+            if (wordSubmitter.getWord() != "")
+            {
+                int points = wordSubmitter.submitWord();
+                ShowPointsFromSubmitting(points);
+                gameHandler.addPoints(playerNum, points);
+                gameHandler.updateEatenLetters(playerNum, "");
+            }
         }
+
+        UpdatePointsDisplays();
 
         // Update own wall
         HandleWall(wallKeyPressed, currentDirection);
@@ -349,6 +357,19 @@ public class Racer : MonoBehaviour
             {
                 gameHandler.addPoints(playerNum, -1);
             }
+        }
+    }
+
+    private void ShowPointsFromSubmitting(int points)
+    {
+        pointsDisplays.Add(new PointsDisplay(points, getPosition()));
+    }
+
+    private void UpdatePointsDisplays()
+    {
+        foreach (PointsDisplay p in pointsDisplays)
+        {
+            p.Update();
         }
     }
 

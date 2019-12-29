@@ -15,7 +15,7 @@ public class Floor : MonoBehaviour
     private const float MAX_LETTER_SPAWN_TIME = 2f;
 
     // range to count a letter collision
-    private const int LETTER_COLLISION_RANGE = 2;
+    private const float LETTER_COLLISION_RANGE = Letter.TILE_SIZE;
 
     private List<Letter> letters;
     private float spawnTime;
@@ -72,9 +72,9 @@ public class Floor : MonoBehaviour
         Letter removed = null;
         foreach (Letter l in letters)
         {
-            if (withinRange(l.getPosition(), position))
+            if (WithinRange(l.getPosition(), position))
             {
-                racer.eatLetter(l);
+                racer.EatLetter(l);
                 removed = l;
             }
         }
@@ -85,7 +85,7 @@ public class Floor : MonoBehaviour
         }
     }
 
-    private bool withinRange(Vector2 me, Vector2 them)
+    private bool WithinRange(Vector2 me, Vector2 them)
     {
         return System.Math.Abs(me.x - them.x) < LETTER_COLLISION_RANGE && System.Math.Abs(me.y - them.y) < LETTER_COLLISION_RANGE;
     }
