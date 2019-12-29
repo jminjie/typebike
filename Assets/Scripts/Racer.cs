@@ -86,7 +86,7 @@ public class Racer : MonoBehaviour
     {
 
         _gridPosition = new Vector2(x, y);
-        startGridPosition = gridPosition;
+        startGridPosition = _gridPosition;
         moveTimerMax = 1f/60f;
         moveTimer = moveTimerMax;
         floor = GameObject.Find("Floor").GetComponent<Floor>();
