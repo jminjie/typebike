@@ -129,6 +129,11 @@ public class WordSubmitter
         }
     }
 
+    public void reset()
+    {
+        dumpWord();
+    }
+
     private void dumpWord()
     {
         currentWord = "";

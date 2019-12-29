@@ -110,6 +110,16 @@ public class Floor : MonoBehaviour
         return System.Math.Abs(me.x - them.x) < LETTER_COLLISION_RANGE && System.Math.Abs(me.y - them.y) < LETTER_COLLISION_RANGE;
     }
 
+    public void reset()
+    {
+        foreach (Letter l in letters)
+        {
+            l.destroy();
+        }
+        letters.Clear();
+        Start();
+    }
+
     // Update is called once per frame
     void Update()
     {
