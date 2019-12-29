@@ -1,17 +1,16 @@
-﻿<Properties StartupConfiguration="{A13D1A58-49CF-6C5C-FD58-85C8BD53ECD2}|">
+﻿<Properties StartupConfiguration="{BB039D9A-E43E-1963-6E31-BD65F9E3185A}|">
   <MonoDevelop.Ide.ItemProperties.NewAssembly PreferredExecutionTarget="9eac2c8a-937d-49e1-95e2-214e6ad952e2" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Racer2.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameHandler.cs">
     <Files>
-      <File FileName="Assets/Scripts/GameHandler.cs" Line="15" Column="29" />
-      <File FileName="Assets/Scripts/Racer.cs" Line="282" Column="20" />
-      <File FileName="Assets/Scripts/WordSubmitter.cs" Line="38" Column="38" />
-      <File FileName="Assets/Scripts/ClickText.cs" Line="13" Column="1" />
-      <File FileName="Assets/Scripts/Racer1.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PlayervsAiClick.cs" Line="19" Column="10" />
-      <File FileName="Assets/Scripts/Letter.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PlayerVsPlayer.cs" Line="18" Column="75" />
-      <File FileName="Assets/Scripts/AIRacer.cs" Line="19" Column="31" />
-      <File FileName="Assets/Scripts/Racer2.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameHandler.cs" Line="144" Column="45" />
+      <File FileName="Assets/Scripts/Racer.cs" Line="46" Column="17" />
+      <File FileName="Assets/Scripts/WordSubmitter.cs" />
+      <File FileName="Assets/Scripts/Racer1.cs" />
+      <File FileName="Assets/Scripts/Letter.cs" />
+      <File FileName="Assets/Scripts/AIRacer.cs" />
+      <File FileName="Assets/Scripts/Racer2.cs" />
+      <File FileName="Assets/Scripts/Floor.cs" />
+      <File FileName="Assets/Scripts/MainMenuText.cs" Line="23" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -19,7 +18,7 @@
           <Node name="TypeByke" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="Racer2.cs" selected="True" />
+                <Node name="GameHandler.cs" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -29,7 +28,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6386c0aa-5d36-47fc-a7f8-4a6b1cc3c8ff" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="9eac2c8a-937d-49e1-95e2-214e6ad952e2" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

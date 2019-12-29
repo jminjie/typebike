@@ -46,10 +46,10 @@ public class Racer : MonoBehaviour
     private float activateBoostTime;
     private float wallingStartTime;
 
-    private const int UP = 0;
-    private const int DOWN = 1;
-    private const int LEFT = 2;
-    private const int RIGHT = 3;
+    protected const int UP = 0;
+    protected const int DOWN = 1;
+    protected const int LEFT = 2;
+    protected const int RIGHT = 3;
 
     private int currentDirection = UP;
     private const float ORIGINAL_VELOCITY = 60.0f;

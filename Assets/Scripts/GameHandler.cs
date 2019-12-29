@@ -16,7 +16,6 @@ public class GameHandler : MonoBehaviour
 
     private const int MAX_POINTS = 30;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -88,7 +87,7 @@ public class GameHandler : MonoBehaviour
             return;
         }
         TextMesh winTextUI = transform.GetChild(4).GetComponent<TextMesh>();
-        winTextUI.text = "PLAYER " + playerNum + " WINS\nPress 'r' to restart";
+        winTextUI.text = "PLAYER " + playerNum + " WINS\nPress 'r' to restart\nPress 'm' for menu";
         gameIsOver = true;
     }
 
@@ -139,6 +138,10 @@ public class GameHandler : MonoBehaviour
         if (gameIsOver && Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene( SceneManager.GetActiveScene().name );
+        }
+        if (gameIsOver && Input.GetKeyDown(KeyCode.M))
+        {
+            SceneManager.LoadScene("MainMenu");
         }
     }
 }
