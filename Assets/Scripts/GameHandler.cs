@@ -20,12 +20,17 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         gameIsOver = false;
-        player1Letters = "PLAYER 1:";
-        player2Letters = "PLAYER 2:";
+        player1Letters = "";
+        player2Letters = "";
         player1Points = 0;
         player2Points = 0;
         WordSubmitter.initDict();
         resetBestWord();
+        bestWord = "";
+        TextMesh winTextUI = transform.GetChild(4).GetComponent<TextMesh>();
+        winTextUI.text = "";
+
+        updateGameInfo();
     }
 
     private void resetBestWord()
@@ -44,10 +49,10 @@ public class GameHandler : MonoBehaviour
     public void updateEatenLetters(int playerNum, string letters)
     {
         if (playerNum == 1) {
-            player1Letters = "PLAYER 1: " + letters;
+            player1Letters = letters;
         } else
         {
-            player2Letters = "PLAYER 2: " + letters;
+            player2Letters = letters;
         }
         updateGameInfo();
     }
@@ -81,12 +86,8 @@ public class GameHandler : MonoBehaviour
         {
             return;
         }
-        TextMesh mesh = GetComponent<TextMesh>();
-        mesh.text = "BEST WORD:\n" + bestWord;
-        if (bestWord != "") {
-            mesh.text += " (" + bestWordPoints + ")";
-        }
-        mesh.text += "\nPLAYER " + playerNum + " WINS\n SCORE: " + player1Points + " - " + player2Points + "\nPress 'r' to restart";
+        TextMesh winTextUI = transform.GetChild(4).GetComponent<TextMesh>();
+        winTextUI.text = "PLAYER " + playerNum + " WINS\nPress 'r' to restart";
         gameIsOver = true;
     }
 
@@ -121,9 +122,14 @@ public class GameHandler : MonoBehaviour
         {
             return;
         }
-        TextMesh mesh = GetComponent<TextMesh>();
-        mesh.text = "BEST WORD:\n" + bestWord + " (" + bestWordPoints + ")\n" + player1Letters + "\n" + player2Letters
-            + "\n SCORE: " + player1Points + " - " + player2Points;
+        TextMesh bestWordUI = transform.GetChild(0).GetComponent<TextMesh>();
+        TextMesh scoreUI = transform.GetChild(1).GetComponent<TextMesh>();
+        TextMesh p1WordUI = transform.GetChild(2).GetComponent<TextMesh>();
+        TextMesh p2WordUI = transform.GetChild(3).GetComponent<TextMesh>();
+        bestWordUI.text = "BEST WORD: " + bestWord + " (" + bestWordPoints + ")";
+        scoreUI.text = "SCORE: : " + player1Points + " - " + player2Points;
+        p1WordUI.text = "PLAYER 1: " + player1Letters;
+        p2WordUI.text = "PLAYER 2: " + player2Letters;
     }
 
     // Update is called once per frame
