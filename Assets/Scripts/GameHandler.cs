@@ -127,9 +127,9 @@ public class GameHandler : MonoBehaviour
         TextMesh p1WordUI = transform.GetChild(2).GetComponent<TextMesh>();
         TextMesh p2WordUI = transform.GetChild(3).GetComponent<TextMesh>();
         bestWordUI.text = "BEST WORD: " + bestWord + " (" + bestWordPoints + ")";
-        scoreUI.text = "SCORE: : " + player1Points + " - " + player2Points;
-        p1WordUI.text = "PLAYER 1: " + player1Letters;
-        p2WordUI.text = "PLAYER 2: " + player2Letters;
+        scoreUI.text = "SCORE: " + player1Points + " - " + player2Points;
+        p1WordUI.text = "PLAYER 1: [" + player1Points + "] " + player1Letters;
+        p2WordUI.text = "PLAYER 2: [" + player2Points + "] " + player2Letters;
     }
 
     // Update is called once per frame
