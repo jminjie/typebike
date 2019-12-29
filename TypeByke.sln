@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewAssembly", "NewAssembly.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests.csproj", "{5F738128-DC5D-21A8-1942-FACA98A4065D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{BB039D9A-E43E-1963-6E31-BD65F9E3185A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{5F738128-DC5D-21A8-1942-FACA98A4065D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F738128-DC5D-21A8-1942-FACA98A4065D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F738128-DC5D-21A8-1942-FACA98A4065D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB039D9A-E43E-1963-6E31-BD65F9E3185A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB039D9A-E43E-1963-6E31-BD65F9E3185A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB039D9A-E43E-1963-6E31-BD65F9E3185A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB039D9A-E43E-1963-6E31-BD65F9E3185A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

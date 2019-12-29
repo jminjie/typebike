@@ -16,6 +16,7 @@ public class GameHandler : MonoBehaviour
 
     private const int MAX_POINTS = 30;
 
+
     // Start is called before the first frame update
     void Start()
     {
