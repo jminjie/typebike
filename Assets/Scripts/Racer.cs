@@ -56,10 +56,10 @@ public class Racer : MonoBehaviour
     private float velocity = ORIGINAL_VELOCITY;
 
     private bool currentlyWalling = false;
-    private Wall currentWall;
-    private List<Wall> walls;
-    private List<PointsDisplay> pointsDisplays;
-    private Racer otherRacer;
+    protected Wall currentWall;
+    protected List<Wall> walls;
+    protected List<PointsDisplay> pointsDisplays;
+    protected Racer otherRacer;
     public Floor floor;
     public GameHandler gameHandler;
     
