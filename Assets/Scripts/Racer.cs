@@ -28,11 +28,15 @@ public class Wall
 
 public class Racer : MonoBehaviour
 {
-
+    public const int UP = Floor.UP;
+    public const int DOWN = Floor.DOWN;
+    public const int LEFT = Floor.LEFT;
+    public const int RIGHT = Floor.RIGHT;
+    
     // enable walls and boost without points
     private bool GODMODE = false;
 
-    private Vector2 gridPosition;
+    protected Vector2 _gridPosition;
     private float moveTimer;
     private float moveTimerMax;
 
@@ -45,11 +49,6 @@ public class Racer : MonoBehaviour
 
     private float activateBoostTime;
     private float wallingStartTime;
-
-    protected const int UP = 0;
-    protected const int DOWN = 1;
-    protected const int LEFT = 2;
-    protected const int RIGHT = 3;
 
     private int currentDirection = UP;
     private const float ORIGINAL_VELOCITY = 60.0f;
@@ -72,7 +71,7 @@ public class Racer : MonoBehaviour
 
     public void AwakeBase(int x, int y, string otherRacerString, Color color)
     {
-        gridPosition = new Vector2(x, y);
+        _gridPosition = new Vector2(x, y);
         moveTimerMax = 1f/60f;
         moveTimer = moveTimerMax;
         floor = GameObject.Find("Floor").GetComponent<Floor>();
@@ -91,26 +90,26 @@ public class Racer : MonoBehaviour
     {
         if (direction == UP)
         {
-            return new Vector2(gridPosition.x, gridPosition.y - 0.5f);
+            return new Vector2(_gridPosition.x, _gridPosition.y - 0.5f);
         }
         if (direction == DOWN)
         {
-            return new Vector2(gridPosition.x, gridPosition.y + 0.5f);
+            return new Vector2(_gridPosition.x, _gridPosition.y + 0.5f);
         }
         if (direction == LEFT)
         {
-            return new Vector2(gridPosition.x + 0.5f, gridPosition.y);
+            return new Vector2(_gridPosition.x + 0.5f, _gridPosition.y);
         }
         if (direction == RIGHT)
         {
-            return new Vector2(gridPosition.x - 0.5f, gridPosition.y);
+            return new Vector2(_gridPosition.x - 0.5f, _gridPosition.y);
         }
-        return new Vector2(gridPosition.x, gridPosition.y);
+        return new Vector2(_gridPosition.x, _gridPosition.y);
     }
 
     public Vector2 getPosition()
     {
-        return gridPosition;
+        return _gridPosition;
     }
 
     private void SetRacerColor(Color c)
@@ -137,33 +136,33 @@ public class Racer : MonoBehaviour
         float bufferCheck = frameChange - epsilon;
         if (wall.direction == UP)
         {
-            if (gridPosition.y > wall.startPos.y - bufferCheck && gridPosition.y < wall.endPos.y + bufferCheck)
+            if (_gridPosition.y > wall.startPos.y - bufferCheck && _gridPosition.y < wall.endPos.y + bufferCheck)
             {
-                return System.Math.Abs(gridPosition.x - wall.startPos.x) < 1.0f;
+                return System.Math.Abs(_gridPosition.x - wall.startPos.x) < 1.0f;
             }
             return false;
         }
         if (wall.direction == DOWN)
         {
-            if (gridPosition.y < wall.startPos.y + bufferCheck && gridPosition.y > wall.endPos.y - bufferCheck)
+            if (_gridPosition.y < wall.startPos.y + bufferCheck && _gridPosition.y > wall.endPos.y - bufferCheck)
             {
-                return System.Math.Abs(gridPosition.x - wall.startPos.x) < 1.0f;
+                return System.Math.Abs(_gridPosition.x - wall.startPos.x) < 1.0f;
             }
             return false;
         }
         if (wall.direction == LEFT)
         {
-            if (gridPosition.x < wall.startPos.x + bufferCheck && gridPosition.x > wall.endPos.x-bufferCheck)
+            if (_gridPosition.x < wall.startPos.x + bufferCheck && _gridPosition.x > wall.endPos.x-bufferCheck)
             {
-                return System.Math.Abs(gridPosition.y - wall.startPos.y) < 1.0f;
+                return System.Math.Abs(_gridPosition.y - wall.startPos.y) < 1.0f;
             }
             return false;
         }
         if (wall.direction == RIGHT)
         {
-            if (gridPosition.x > wall.startPos.x - bufferCheck && gridPosition.x < wall.endPos.x+bufferCheck)
+            if (_gridPosition.x > wall.startPos.x - bufferCheck && _gridPosition.x < wall.endPos.x+bufferCheck)
             {
-                return System.Math.Abs(gridPosition.y - wall.startPos.y) < 1.0f;
+                return System.Math.Abs(_gridPosition.y - wall.startPos.y) < 1.0f;
             }
             return false;
         }
@@ -178,7 +177,7 @@ public class Racer : MonoBehaviour
             {
                 Debug.Log("wall start " + wall.startPos.x + "," + wall.startPos.y);
                 Debug.Log("wall end " + wall.endPos.x + "," + wall.endPos.y);
-                Debug.Log("racer pos " + gridPosition.x + "," + gridPosition.y);
+                Debug.Log("racer pos " + _gridPosition.x + "," + _gridPosition.y);
                 destroyTheRacer();
             }
         }
@@ -326,21 +325,21 @@ public class Racer : MonoBehaviour
         if (moveTimer >= moveTimerMax) {
             if (currentDirection == UP)
             {
-                gridPosition.y += moveTimerMax * velocity;
+                _gridPosition.y += moveTimerMax * velocity;
             }
             else if (currentDirection == DOWN)
             {
-                gridPosition.y -= moveTimerMax * velocity;
+                _gridPosition.y -= moveTimerMax * velocity;
             }
             else if (currentDirection == LEFT)
             {
-                gridPosition.x -= moveTimerMax * velocity;
+                _gridPosition.x -= moveTimerMax * velocity;
             }
             else if (currentDirection == RIGHT)
             {
-                gridPosition.x += moveTimerMax * velocity;
+                _gridPosition.x += moveTimerMax * velocity;
             }
-            transform.position = new Vector3(gridPosition.x, gridPosition.y);
+            transform.position = new Vector3(_gridPosition.x, _gridPosition.y);
             moveTimer = 0;
             floor.shipMoved(this);
 

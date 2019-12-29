@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Floor : MonoBehaviour
 {
     // board dimensions
     public const int WIDTH = 150;
     public const int HEIGHT = 100;
+
+    // Used for racer directions as well as OOB checking
+    public const int UP = 0;
+    public const int DOWN = 1;
+    public const int LEFT = 2;
+    public const int RIGHT = 3;
 
     // num letters at once
     private const int MAX_LETTERS = 20;
@@ -52,18 +59,31 @@ public class Floor : MonoBehaviour
         letters.Add(letter);
     }
 
-    public bool OutOfBounds(Vector2 position) {
-        if (position.x < 0 || position.x > WIDTH || position.y < 0 || position.y > HEIGHT) {
-            return true;
+    static public (bool,int) OutOfBounds(Vector2 position) {
+        if (position.y > HEIGHT)
+        {
+            return (true, UP);
         }
-        return false;
+        if (position.y < 0)
+        {
+            return (true, DOWN);
+        }
+        if (position.x < 0)
+        {
+            return (true, LEFT);
+        }
+        if (position.x > WIDTH)
+        {
+            return (true, RIGHT);
+        }
+        return (false, -1);
     }
 
     public void shipMoved(Racer racer)
     {
         Vector2 position = racer.getPosition();
         // check if ship's position is on the outer rim (destroy ship)
-        if (OutOfBounds(position)) {
+        if (OutOfBounds(position).Item1) {
             racer.destroyTheRacer();
         }
 
