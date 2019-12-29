@@ -23,6 +23,11 @@ public class Wall
         renderer.material = material;
         wallGameObject.transform.position = new Vector3(startPos.x, startPos.y, 0);
     }
+
+    public void destroy()
+    {
+        GameObject.Destroy(wallGameObject);
+    }
 }
 
 
@@ -32,6 +37,7 @@ public class Racer : MonoBehaviour
     // enable walls and boost without points
     private bool GODMODE = false;
 
+    private Vector2 startGridPosition;
     private Vector2 gridPosition;
     private float moveTimer;
     private float moveTimerMax;
@@ -51,7 +57,8 @@ public class Racer : MonoBehaviour
     protected const int LEFT = 2;
     protected const int RIGHT = 3;
 
-    private int currentDirection = UP;
+    private const int START_DIR = UP;
+    private int currentDirection = START_DIR;
     private const float ORIGINAL_VELOCITY = 60.0f;
     private float velocity = ORIGINAL_VELOCITY;
 
@@ -73,6 +80,7 @@ public class Racer : MonoBehaviour
     public void AwakeBase(int x, int y, string otherRacerString, Color color)
     {
         gridPosition = new Vector2(x, y);
+        startGridPosition = gridPosition;
         moveTimerMax = 1f/60f;
         moveTimer = moveTimerMax;
         floor = GameObject.Find("Floor").GetComponent<Floor>();
@@ -85,6 +93,25 @@ public class Racer : MonoBehaviour
         ButtonCounter = new int[]{ 0, 0, 0, 0 };
         ButtonCooler = new float[] { DOUBLE_TAP_TIME, DOUBLE_TAP_TIME, DOUBLE_TAP_TIME, DOUBLE_TAP_TIME };
         activateBoostTime = 0f;
+    }
+
+    private void clearWalls()
+    {
+        foreach (Wall w in walls)
+        {
+            w.destroy();   
+        }
+        walls.Clear();
+    }
+
+    private void SetStartPosAndDir()
+    {
+        gridPosition = startGridPosition;
+        currentDirection = START_DIR;
+    }
+
+    private void ClearWalls()
+    {
     }
 
     public Vector2 BackOfRacer(int direction)
@@ -199,7 +226,12 @@ public class Racer : MonoBehaviour
     public void destroyTheRacer()
     {
         gameHandler.racerDied(playerNum);
-        Destroy(gameObject);
+        Explode();
+    }
+
+    private void Explode()
+    {
+        gameObject.SetActive(false);
     }
 
     private void ActivateBoost()
@@ -376,6 +408,27 @@ public class Racer : MonoBehaviour
         {
             p.Update();
         }
+    }
+
+    public void respawn()
+    {
+        Debug.Log("Respawning");
+        Explode();
+
+        // reset power bar
+        powerBar.reset();
+
+        // reset word
+        wordSubmitter.reset();
+
+        // clear walls
+        clearWalls();
+
+        // set position and direction
+        SetStartPosAndDir();
+
+        // enable
+        gameObject.SetActive(true);
     }
 
     private void StartWall()

@@ -57,7 +57,7 @@ public class Letter
         return value;
     }
 
-    private void destroy()
+    public void destroy()
     {
         GameObject.Destroy(letterGameObject);
         GameObject.Destroy(letterFrame);

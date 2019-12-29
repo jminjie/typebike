@@ -50,4 +50,9 @@ public class PowerBar : MonoBehaviour
             currentBlockY -= BLOCK_HEIGHT + BLOCK_BUFFER;
         }
     }
+
+    public void reset()
+    {
+        removePoints(blocks.Count);
+    }
 }
