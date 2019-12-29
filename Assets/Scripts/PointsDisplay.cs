@@ -5,7 +5,7 @@ using UnityEngine;
 public class PointsDisplay
 {
     private const float TEXT_SIZE = 1f;
-    private Color LETTER_COLOR = new Color(255, 255, 255, 255);
+    private Color letterColor;
     private float createTime;
     private float LIFE_SPAN = 1;
     private GameObject pointsGameObject;
@@ -19,7 +19,16 @@ public class PointsDisplay
         pointsGameObject.transform.localScale += new Vector3(TEXT_SIZE, TEXT_SIZE);
         TextMesh mesh = pointsGameObject.GetComponent<TextMesh>();
         mesh.text = points.ToString();
-        mesh.color = LETTER_COLOR;
+        if (points == 0) {
+            letterColor = Color.red;
+        } else if (points < 5)
+        {
+            letterColor = Color.white;
+        } else if (points > 9)
+        {
+            letterColor = new Color(153, 255, 153, 1);
+        }
+        mesh.color = letterColor;
         mesh.alignment = TextAlignment.Center;
         mesh.anchor = TextAnchor.MiddleCenter;
         createTime = Time.time;
@@ -39,7 +48,7 @@ public class PointsDisplay
             pointsGameObject.transform.position = new Vector3(position.x+0.07f, position.y + 0.07f);
             TextMesh mesh = pointsGameObject.GetComponent<TextMesh>();
             mesh.text = value.ToString();
-            mesh.color = new Color(255, 255, 255, mesh.color.a - 0.01f);
+            mesh.color = new Color(mesh.color.r, mesh.color.g, mesh.color.b, mesh.color.a - 0.01f);
         }
     }
 }
