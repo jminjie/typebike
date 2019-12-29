@@ -43,6 +43,11 @@ public class PowerBar : MonoBehaviour
 
     public void removePoints(int numPoints)
     {
+        if (blocks.Count < numPoints)
+        {
+            Debug.Log("Tried to remove too many points in power bar. This shouldn't happen");
+            numPoints = blocks.Count;
+        }
         for (int i = 0; i < numPoints; i++)
         {
             GameObject oldBlock = blocks.Pop();

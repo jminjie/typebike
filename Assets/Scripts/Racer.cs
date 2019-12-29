@@ -35,6 +35,7 @@ public class Racer : MonoBehaviour
 {
 
     // enable walls and boost without points
+    // TODO this doenst' work anymore, causes runtime exceptions
     private bool GODMODE = false;
 
     private Vector2 startGridPosition;
@@ -77,6 +78,9 @@ public class Racer : MonoBehaviour
     protected int playerNum;
     private Color color;
 
+    private Transform speedLine1;
+    private Transform speedLine2;
+
     public void AwakeBase(int x, int y, string otherRacerString, Color color)
     {
         gridPosition = new Vector2(x, y);
@@ -93,6 +97,24 @@ public class Racer : MonoBehaviour
         ButtonCounter = new int[]{ 0, 0, 0, 0 };
         ButtonCooler = new float[] { DOUBLE_TAP_TIME, DOUBLE_TAP_TIME, DOUBLE_TAP_TIME, DOUBLE_TAP_TIME };
         activateBoostTime = 0f;
+
+        speedLine1 = gameObject.transform.GetChild(0);
+        speedLine2 = gameObject.transform.GetChild(1);
+
+        SetSpeedLineBrightness(0);
+    }
+
+    private void SetSpeedLineBrightness(float brightness)
+    {
+        // create transparent material
+        Material material = new Material(Shader.Find("Unlit/Color"));
+        material.color = new Color(brightness, brightness, brightness);
+
+        // set the speed lines to the transparent material
+        Renderer renderer1 = speedLine1.GetComponent<Renderer>();
+        renderer1.material = material;
+        Renderer renderer2 = speedLine2.GetComponent<Renderer>();
+        renderer2.material = material;
     }
 
     private void clearWalls()
@@ -108,10 +130,37 @@ public class Racer : MonoBehaviour
     {
         gridPosition = startGridPosition;
         currentDirection = START_DIR;
+        setSpeedLines();
     }
 
-    private void ClearWalls()
+    // called whenever direction changes
+    private void setSpeedLines()
     {
+        if (currentDirection == UP)
+        {
+            speedLine1.transform.localPosition = new Vector3(-0.5f, -1f);
+            speedLine2.transform.localPosition = new Vector3(0.5f, -1f);
+            speedLine1.transform.localScale = new Vector3(0.2f, 3f);
+            speedLine2.transform.localScale = new Vector3(0.2f, 3f);
+        } else if (currentDirection == DOWN)
+        {
+            speedLine1.transform.localPosition = new Vector3(0.5f, 1f);
+            speedLine2.transform.localPosition = new Vector3(-0.5f, 1f);
+            speedLine1.transform.localScale = new Vector3(0.2f, 3f);
+            speedLine2.transform.localScale = new Vector3(0.2f, 3f);
+        } else if (currentDirection == LEFT)
+        {
+            speedLine1.transform.localPosition = new Vector3(1f, -0.5f);
+            speedLine2.transform.localPosition = new Vector3(1f, 0.5f);
+            speedLine1.transform.localScale = new Vector3(3f, 0.2f);
+            speedLine2.transform.localScale = new Vector3(3f, 0.2f);
+        } else if (currentDirection == RIGHT)
+        {
+            speedLine1.transform.localPosition = new Vector3(-1f, 0.5f);
+            speedLine2.transform.localPosition = new Vector3(-1f, -0.5f);
+            speedLine1.transform.localScale = new Vector3(3f, 0.2f);
+            speedLine2.transform.localScale = new Vector3(3f, 0.2f);
+        }
     }
 
     public Vector2 BackOfRacer(int direction)
@@ -242,9 +291,10 @@ public class Racer : MonoBehaviour
             Debug.Log("not enough points");
             return;
         }
+        SetSpeedLineBrightness(200);
         gameHandler.addPoints(playerNum, -1);
         powerBar.removePoints(1);
-        SetRacerColor(Color.red);
+        SetRacerColor(Color.white);
         activateBoostTime = Time.time;
         velocity = ORIGINAL_VELOCITY * 1.6f;
         if (points < 1)
@@ -256,6 +306,7 @@ public class Racer : MonoBehaviour
     private void EndBoost()
     {
         SetRacerColor(GetColor());
+        SetSpeedLineBrightness(0);
         activateBoostTime = 0f;
         velocity = ORIGINAL_VELOCITY;
 
@@ -315,21 +366,25 @@ public class Racer : MonoBehaviour
         {
             HandleBoost(UP);
             currentDirection = UP;
+            setSpeedLines();
         }
         else if (downPressed && currentDirection != UP)
         {
             HandleBoost(DOWN);
             currentDirection = DOWN;
+            setSpeedLines();
         }
         else if (leftPressed && currentDirection != RIGHT)
         {
             HandleBoost(LEFT);
             currentDirection = LEFT;
+            setSpeedLines();
         }
         else if (rightPressed && currentDirection != LEFT)
         {
             HandleBoost(RIGHT);
             currentDirection = RIGHT;
+            setSpeedLines();
         }
 
         if (activateBoostTime != 0f && activateBoostTime + BOOST_DURATION < Time.time)
