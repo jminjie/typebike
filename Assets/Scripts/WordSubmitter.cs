@@ -19,6 +19,8 @@ public class WordSubmitter
     private static int highestScoringWordPoints;
     private static GameHandler gameHandler;
 
+    private Color ownerColor;
+
     public static void initDict()
     {
         if (dict == null) {
@@ -39,9 +41,16 @@ public class WordSubmitter
 
     }
 
-    public WordSubmitter()
+    // used for tests
+    public static WordSubmitter GetWordSubmitterForTest()
+    {
+        return new WordSubmitter(Color.white);
+    }
+
+    public WordSubmitter(Color color)
     {
         currentWord = "";
+        ownerColor = color;
     }
 
     private string currentWord;
@@ -108,7 +117,7 @@ public class WordSubmitter
             {
                 highestScoringWord = currentWord;
                 highestScoringWordPoints = points;
-                gameHandler.setBestWord(highestScoringWord, points);
+                gameHandler.setBestWord(ownerColor, highestScoringWord, points);
             }
             currentWord = "";
             return points;

@@ -9,6 +9,7 @@ public class GameHandler : MonoBehaviour
     private string player2Letters;
     private int player1Points;
     private int player2Points;
+    private Color bestWordPlayerColor;
     private string bestWord;
     private int bestWordPoints;
 
@@ -27,20 +28,34 @@ public class GameHandler : MonoBehaviour
         WordSubmitter.initDict();
         resetBestWord();
         bestWord = "";
+        bestWordPlayerColor = Color.white;
         TextMesh winTextUI = transform.GetChild(4).GetComponent<TextMesh>();
         winTextUI.text = "";
 
         updateGameInfo();
+        setUIPositions();
+    }
+
+    private void setUIPositions()
+    {
+        transform.GetChild(0).transform.position = new Vector3(76, 106); // bestWordUI
+        transform.GetChild(1).transform.position = new Vector3(0, 106); // score
+        transform.GetChild(2).transform.position = new Vector3(0, -1); //p1word
+        transform.GetChild(3).transform.position = new Vector3(103, -1); //p2word
+        transform.GetChild(4).transform.position = new Vector3(75, 60); //winText
     }
 
     private void resetBestWord()
     {
         bestWord = "";
+        bestWordPlayerColor = Color.white;
         bestWordPoints = 0;
     }
 
-    public void setBestWord(string word, int points)
+    public void setBestWord(Color playerColor, string word, int points)
     {
+        bestWordPlayerColor = playerColor;
+        Debug.Log("Setting best word player color = " + playerColor);
         bestWord = word;
         bestWordPoints = points;
         updateGameInfo();
@@ -127,6 +142,7 @@ public class GameHandler : MonoBehaviour
         TextMesh p1WordUI = transform.GetChild(2).GetComponent<TextMesh>();
         TextMesh p2WordUI = transform.GetChild(3).GetComponent<TextMesh>();
         bestWordUI.text = "BEST WORD: " + bestWord + " (" + bestWordPoints + ")";
+        bestWordUI.color = bestWordPlayerColor;
         scoreUI.text = "SCORE: " + player1Points + " - " + player2Points;
         p1WordUI.text = "PLAYER 1: " + player1Letters;
         p2WordUI.text = "PLAYER 2: " + player2Letters;

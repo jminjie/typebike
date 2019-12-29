@@ -80,8 +80,8 @@ public class Racer : MonoBehaviour
         pointsDisplays = new List<PointsDisplay>();
         gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
         otherRacer = GameObject.Find(otherRacerString).GetComponent<Racer>();
-        wordSubmitter = new WordSubmitter();
         this.color = color;
+        wordSubmitter = new WordSubmitter(color);
         ButtonCounter = new int[]{ 0, 0, 0, 0 };
         ButtonCooler = new float[] { DOUBLE_TAP_TIME, DOUBLE_TAP_TIME, DOUBLE_TAP_TIME, DOUBLE_TAP_TIME };
         activateBoostTime = 0f;

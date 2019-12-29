@@ -13,7 +13,7 @@ namespace Tests
         {
             // Use the Assert cl  // Use the Assert class to test conditions
             WordSubmitter.initDict();
-            WordSubmitter wordSubmitter = new WordSubmitter();
+            WordSubmitter wordSubmitter = WordSubmitter.GetWordSubmitterForTest();
             wordSubmitter.addLetter("H");
             wordSubmitter.addLetter("E");
             wordSubmitter.addLetter("L");
@@ -27,7 +27,7 @@ namespace Tests
         {
             // Use the Assert cl  // Use the Assert class to test conditions
             WordSubmitter.initDict();
-            WordSubmitter wordSubmitter = new WordSubmitter();
+            WordSubmitter wordSubmitter = WordSubmitter.GetWordSubmitterForTest();
             wordSubmitter.addLetter("H");
             wordSubmitter.addLetter("E");
             wordSubmitter.addLetter("L");
