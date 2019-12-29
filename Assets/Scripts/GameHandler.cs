@@ -105,11 +105,11 @@ public class GameHandler : MonoBehaviour
 
     private void checkWin()
     {
-        if (player1Points > MAX_POINTS)
+        if (player1Points >= MAX_POINTS)
         {
             setWin(1);
             gameIsOver = true;
-        } else if (player2Points > MAX_POINTS)
+        } else if (player2Points >= MAX_POINTS)
         {
             setWin(2);
             gameIsOver = true;
@@ -128,8 +128,8 @@ public class GameHandler : MonoBehaviour
         TextMesh p2WordUI = transform.GetChild(3).GetComponent<TextMesh>();
         bestWordUI.text = "BEST WORD: " + bestWord + " (" + bestWordPoints + ")";
         scoreUI.text = "SCORE: " + player1Points + " - " + player2Points;
-        p1WordUI.text = "PLAYER 1: [" + player1Points + "] " + player1Letters;
-        p2WordUI.text = "PLAYER 2: [" + player2Points + "] " + player2Letters;
+        p1WordUI.text = "PLAYER 1: " + player1Letters;
+        p2WordUI.text = "PLAYER 2: " + player2Letters;
     }
 
     // Update is called once per frame

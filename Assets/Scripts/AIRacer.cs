@@ -59,8 +59,12 @@ void Move() {
 			/*otherRacerString=*/"Racer1",
 			new Color(255, 0, 221));
 		playerNum = 2;
+<<<<<<< HEAD
         worldState = new WorldState(gameObject.GetComponent<Racer>(), otherRacer, floor);
 
+=======
+		powerBar = GameObject.Find("Bar2").GetComponent<PowerBar>();
+>>>>>>> a597be5345d4e299c8c04630846348fdefe2b501
 	}
 
     // Update is called once per frame

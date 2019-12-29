@@ -62,6 +62,8 @@ public class Racer : MonoBehaviour
     protected Racer otherRacer;
     public Floor floor;
     public GameHandler gameHandler;
+
+    protected PowerBar powerBar;
     
     private WordSubmitter wordSubmitter;
 
@@ -209,6 +211,7 @@ public class Racer : MonoBehaviour
             return;
         }
         gameHandler.addPoints(playerNum, -1);
+        powerBar.removePoints(1);
         SetRacerColor(Color.red);
         activateBoostTime = Time.time;
         velocity = ORIGINAL_VELOCITY * 1.6f;
@@ -309,6 +312,7 @@ public class Racer : MonoBehaviour
                 int points = wordSubmitter.submitWord();
                 ShowPointsFromSubmitting(points);
                 gameHandler.addPoints(playerNum, points);
+                powerBar.addPoints(points);
                 gameHandler.updateEatenLetters(playerNum, "");
             }
         }
@@ -356,6 +360,7 @@ public class Racer : MonoBehaviour
             if (points > 0)
             {
                 gameHandler.addPoints(playerNum, -1);
+                powerBar.removePoints(1);
             }
         }
     }
@@ -429,6 +434,7 @@ public class Racer : MonoBehaviour
                 return;
             }
             gameHandler.addPoints(playerNum, -1);
+            powerBar.removePoints(1);
             wallingStartTime = Time.time;
             StartWall();
             return;
