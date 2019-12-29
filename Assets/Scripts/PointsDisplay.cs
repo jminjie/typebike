@@ -23,10 +23,10 @@ public class PointsDisplay
             letterColor = Color.red;
         } else if (points < 5)
         {
-            letterColor = Color.white;
-        } else if (points > 9)
+            letterColor = new Color(255, 255, 255, 1.0f);
+        } else
         {
-            letterColor = new Color(153, 255, 153, 1);
+            letterColor = new Color(153, 255, 153, 1.0f);
         }
         mesh.color = letterColor;
         mesh.alignment = TextAlignment.Center;
@@ -37,7 +37,6 @@ public class PointsDisplay
     // called from Racer
     public void Update()
     {
-        Debug.Log("PointsDisplay update called");
         if (Time.time > (createTime + LIFE_SPAN))
         {
             GameObject.Destroy(pointsGameObject);
