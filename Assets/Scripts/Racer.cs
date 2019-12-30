@@ -206,9 +206,13 @@ public class Racer : MonoBehaviour
         wordSubmitter.addLetter(l.getValueAndDestroy());
         gameHandler.updateEatenLetters(playerNum, wordSubmitter.getWord()) ;
     }
+
+    // Does not include currentWall
     public List<Wall> GetWalls() => walls;
 
-    bool CollidesWithWall(Wall wall)
+    public Wall GetCurrentWall() => currentWall;
+
+    public bool CollidesWithWall(Wall wall)
     {
         float frameChange = 0.5f;
         float epsilon = 0.001f;

@@ -39,6 +39,11 @@ public class Floor : MonoBehaviour
         }
     }
 
+    public List<Letter> GetLetters()
+    {
+        return letters;
+    }
+
     private void spawnLetter()
     {
         if (letters.Count > MAX_LETTERS)

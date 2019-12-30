@@ -16,6 +16,8 @@ public class WorldState
     public Floor floor;
 }
 
+
+
 public class AIRacer : Racer
 {
 	// Visible Game State that AI needs 
@@ -109,87 +111,158 @@ public class AIRacer : Racer
         }
         return -1;
     }
-    void TurnAwayFromDirection(int direction)
+
+    // Gonna be a little sloppy here, it's okay since this is for obstacle avoidance
+    bool CollidesWithWalls(
+        Vector2 futurePos,
+        List<Wall> walls)
     {
-        Debug.Log("Turning away from direction " + direction);
-        if (_direction != direction)
+        foreach (Wall wall in walls)
         {
-            _direction = OppositeDir(_direction);
-            Debug.Log("Choosing new direction " + _direction);
-            return;
+            if (base.CollidesWithWall(wall))
+            {
+                return true;
+            }
         }
-        // Try turning clockwise
-        (bool wouldBeOobIfClockwiseTurn, _) = Floor.OutOfBounds(ProjectForward(_gridPosition, Clockwise(_direction), 3.0f));
-        if (!wouldBeOobIfClockwiseTurn)
-        {
-            _direction = Clockwise(_direction);
-            Debug.Log("Choosing new direction " + _direction);
-            return;
-        }
-        _direction = Counterclockwise(_direction);
-        Debug.Log("Choosing new direction " + _direction);
+        return false;
     }
 
-    bool CollisionAvoidance()
+
+    List<float> CollisionAvoidance(
+    Vector2 gridPosition,
+    List<Wall> allWalls,
+    List<int> possibleDirections)
     {
-        (bool wouldBeOob, int oobDirection) = Floor.OutOfBounds(ProjectForward(_gridPosition, _direction, 3.0f));
-        if (wouldBeOob) 
+        List<float> votes = new List<float>();
+        foreach (int direction in possibleDirections)
         {
-            Debug.Log("AI detecting collision, attempting to turn");
-            // Check the oob code and redirect accordingly
-            TurnAwayFromDirection(oobDirection);            
+            Vector2 futurePos = ProjectForward(gridPosition, direction, 3.0f);
+            (bool wouldBeOob, _) = Floor.OutOfBounds(futurePos);
+            bool collidesWithWalls = CollidesWithWalls(futurePos, allWalls);
+            if (wouldBeOob || collidesWithWalls)
+            {
+                votes.Add(0.0f);
+            }
+            else
+            {
+                votes.Add(100.0f);
+            }
+        }
+        return votes;
+    }
+
+    float ManhattanDistance(Vector2 a, Vector2 b)
+    {
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    }
+
+    List<float> GoalSeeking(
+    Vector2 gridPosition,
+    List<Letter> letters,
+    List<int> possibleDirections)
+    {
+        List<float> votes = new List<float>();
+
+        // Get closest letter
+        if (letters.Count == 0)
+        {
+            return new List<float>(possibleDirections.Count);
+        }
+
+        float closestLetterDistance = float.MaxValue;
+        int closestLetterIdx = -1;
+        for (int i = 0; i < letters.Count; ++i)
+        {
+            float distanceToLetter = ManhattanDistance(gridPosition, letters[i].getPosition());
+            if (distanceToLetter < closestLetterDistance)
+            {
+                closestLetterIdx = i;
+                closestLetterDistance = distanceToLetter;
+            }
+        }
+
+        foreach (int direction in possibleDirections)
+        {
+            Vector2 futurePos = ProjectForward(gridPosition, direction, 1.0f);
+            if (ManhattanDistance(futurePos, letters[closestLetterIdx].getPosition()) < closestLetterDistance)
+            {
+                votes.Add(10.0f);
+            } else
+            {
+                votes.Add(0.0f);
+            }
+        }
+        return votes;
+    }
+
+
+
+    List<float> AvoidOtherRacer(
+    Vector2 gridPosition,
+    Vector2 otherRacerPosition,
+    List<int> possibleDirections)
+    {
+        List<float> votes = new List<float>();
+        float currentDistance = ManhattanDistance(gridPosition, otherRacerPosition);
+        foreach (int direction in possibleDirections)
+        {
+            // Add a random number for now
+            Vector2 futurePosition = ProjectForward(gridPosition, direction, 1.0f);
+            if (ManhattanDistance(futurePosition, otherRacerPosition) >
+                currentDistance)
+            {
+                votes.Add(10.0f);
+            } else
+            {
+                votes.Add(0.0f);
+            }
+        }
+        return votes;
+    }
+
+
+    // Returns true if _direction was changed
+    bool SelectDirection()
+    {
+        moveTimer += Time.deltaTime;
+
+        List<int> possibleDirections =  new List<int>() {
+            _direction,
+            Clockwise(_direction),
+            Counterclockwise(_direction)};
+
+        List<Wall> allWalls = new List<Wall>();
+        allWalls.AddRange(walls);
+        allWalls.AddRange(otherRacer.GetWalls());
+        if (otherRacer.GetCurrentWall() != null)
+        {
+            allWalls.Add(otherRacer.GetCurrentWall());
+        }
+        List<float> collisionAvoidanceVotes = CollisionAvoidance(_gridPosition, allWalls, possibleDirections);
+        List<float> seekingGoalVotes = GoalSeeking(_gridPosition, floor.GetLetters(), possibleDirections);
+        List<float> avoidingOpponentVotes = AvoidOtherRacer(_gridPosition, otherRacer.getPosition(), possibleDirections);
+
+        float bestScore = -1f;
+        int bestChoice = -1;
+        for (int i =0; i < possibleDirections.Count; ++i)
+        {
+            float score = collisionAvoidanceVotes[i] + seekingGoalVotes[i] + avoidingOpponentVotes[i];
+            if (score > bestScore)
+            {               
+                bestChoice = i;
+                bestScore = score;
+            }
+        }
+
+        if (possibleDirections[bestChoice] != _direction)
+        {
+            _direction = possibleDirections[bestChoice];
             return true;
         }
         return false;
     }
 
-    // Returns true if action selected
-    bool SelectDirection()
-    {
-        moveTimer += Time.deltaTime;
-        bool avoiding = CollisionAvoidance();
-        if (avoiding)
-        {
-            return true;
-        }
-        if (moveTimer < 0.3f)
-        {
-            return false;
-        }        
-        moveTimer = 0.0f;
-        Debug.Log("Choosing random direction");
-        // Try turning cw/ccw
-        int coinFlip = Random.Range(0, 3);
-        if (coinFlip == 0)
-        {
-            (bool wouldBeOobIfClockwiseTurn, _) = Floor.OutOfBounds(ProjectForward(_gridPosition, Clockwise(_direction), 3.0f));
-            if (!wouldBeOobIfClockwiseTurn)
-            {
-                _direction = Clockwise(_direction);
-                Debug.Log("Choosing new direction " + _direction);
-            }
-            else
-            {
-                _direction = Counterclockwise(_direction);
-                Debug.Log("Choosing new direction " + _direction);
-            }
-        } else if (coinFlip == 1)
-        {
-            (bool wouldBeOobIfCcwTurn, _) = Floor.OutOfBounds(ProjectForward(_gridPosition, Counterclockwise(_direction), 3.0f));
-            if (!wouldBeOobIfCcwTurn)
-            {
-                _direction = Counterclockwise(_direction);
-                Debug.Log("Choosing new direction " + _direction);
-            }
-            else
-            {
-                _direction = Clockwise(_direction);
-                Debug.Log("Choosing new direction " + _direction);
-            }
-        }
-        // do nothing if coinFlip returned 2
-        return true;
-    }
+
     void Move(bool changed) {
         if (!changed)
         {
