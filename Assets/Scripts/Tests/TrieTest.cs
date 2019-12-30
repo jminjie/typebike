@@ -8,9 +8,8 @@ namespace Tests
 {
     public class TrieTest
     {
-        // A Test behaves as an ordinary method
         [Test]
-        public void TrieTestSimplePasses()
+        public void TrieTestCount()
         {
             // Use the Assert class to test conditions
             Trie trie = new Trie();
@@ -23,6 +22,20 @@ namespace Tests
             Assert.IsTrue(trie.Count("ASF") == 1);
             Assert.IsTrue(trie.Count("ASX") == 0);
         }
-
+        [Test]
+        public void TrieTestFind()
+        {
+            // Use the Assert class to test conditions
+            Trie trie = new Trie();
+            trie.Add("ASDF");
+            Assert.IsFalse(trie.Find("A"));
+            Assert.IsFalse(trie.Find("ASD"));
+            Assert.IsTrue(trie.Find("ASDF"));
+            trie.Add("ASFF");
+            Assert.IsFalse(trie.Find("A"));
+            Assert.IsFalse(trie.Find("AS"));
+            Assert.IsFalse(trie.Find("ASF"));
+            Assert.IsTrue(trie.Find("ASFF"));
+        }
     }
 }

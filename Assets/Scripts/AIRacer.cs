@@ -305,23 +305,39 @@ public class AIRacer : Racer
         return false;
     }
 
+    public bool DecideSubmit()
+    {
+        // greedy logic for now - if this is a word, submit it.
+        if (trie.Find(wordSubmitter.getWord()))
+        {
+            return true;
+        }
+        // If there are no more words with this prefix, submit to get rid of useless tiles
+        if (trie.Count(wordSubmitter.getWord()) == 0) {
+            return true;
+        }
+        return false;
+    }
+
     public override void respawn()
     {
         base.respawn();
         _direction = UP;
     }
 
-    void Move(bool changed) {
-        if (!changed)
+    void Move(
+        bool directionChanged,
+        bool submitWord) {
+        if (!directionChanged)
         {
-            UpdateBase(false, false, false, false, false, false);
+            UpdateBase(false, false, false, false, false, submitWord);
             return;
         }
 		bool moveUp = _direction == UP;
 		bool moveDown = _direction == DOWN;
 		bool moveLeft = _direction == LEFT;
 		bool moveRight = _direction == RIGHT;
-		UpdateBase(moveUp, moveDown, moveLeft, moveRight, false, false);
+		UpdateBase(moveUp, moveDown, moveLeft, moveRight, false, submitWord);
 	}
 	// Start is called before the first frame update
 	void Awake()
@@ -340,7 +356,8 @@ public class AIRacer : Racer
     // Update is called once per frame
     void Update()
     {
-        bool changed = SelectDirection();
-		Move(changed);
+        bool directionChanged = SelectDirection();
+        bool submit = DecideSubmit();
+		Move(directionChanged, submit);
 	}
 }

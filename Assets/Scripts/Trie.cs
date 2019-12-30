@@ -10,10 +10,14 @@ public class Node
     public Node[] children;
     // Number of words starting with this prefix.
     public int prefixNum;
+
+    // True if this represents the end of a valid word.
+    public bool isFinal;
     public Node()
     {
         children = new Node[numChildren];
         prefixNum = 0;
+        isFinal = false;
     }
 }
 
@@ -48,6 +52,7 @@ public class Trie
             node = node.children[idx];
             node.prefixNum++;
         }
+        node.isFinal = true;
     }
     public int Count(string prefix)
     {
@@ -62,6 +67,21 @@ public class Trie
             node = node.children[idx];
         }
         return node.prefixNum;
+    }
+
+    public bool Find(string word)
+    {
+        Node node = root;
+        foreach (char c in word)
+        {
+            int idx = c - 'A';
+            if (node.children[idx] == null)
+            {
+                return false;
+            }
+            node = node.children[idx];
+        }
+        return node.isFinal;
     }
      
 }
