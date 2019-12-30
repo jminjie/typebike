@@ -26,6 +26,7 @@ public class AIRacer : Racer
     // current direction
 	private int _direction;
     private WorldState worldState;
+    private Trie trie;
 
     Vector2 ProjectForward(Vector2 curPos, int direction, float projectionDistance)
     {
@@ -112,7 +113,6 @@ public class AIRacer : Racer
         return -1;
     }
 
-    // Gonna be a little sloppy here, it's okay since this is for obstacle avoidance
     bool CollidesWithWalls(
         Vector2 futurePos,
         List<Wall> walls)
@@ -168,6 +168,22 @@ public class AIRacer : Racer
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
+    Letter GetClosestLetter(Vector2 gridPosition, List<Letter> letters)
+    {
+        float closestLetterDistance = float.MaxValue;
+        int closestLetterIdx = -1;
+        for (int i = 0; i < letters.Count; ++i)
+        {
+            float distanceToLetter = ManhattanDistance(gridPosition, letters[i].getPosition());
+            if (distanceToLetter < closestLetterDistance)
+            {
+                closestLetterIdx = i;
+                closestLetterDistance = distanceToLetter;
+            }
+        }
+        return letters[closestLetterIdx];
+    }
+
     List<float> GoalSeeking(
     Vector2 gridPosition,
     List<Letter> letters,
@@ -181,22 +197,14 @@ public class AIRacer : Racer
             return new List<float>(new float[possibleDirections.Count]);
         }
 
-        float closestLetterDistance = float.MaxValue;
-        int closestLetterIdx = -1;
-        for (int i = 0; i < letters.Count; ++i)
-        {
-            float distanceToLetter = ManhattanDistance(gridPosition, letters[i].getPosition());
-            if (distanceToLetter < closestLetterDistance)
-            {
-                closestLetterIdx = i;
-                closestLetterDistance = distanceToLetter;
-            }
-        }
+        Letter chosenLetter = GetClosestLetter(gridPosition, letters);
+        float chosenLetterDistance = ManhattanDistance(gridPosition, chosenLetter.getPosition());
+
 
         foreach (int direction in possibleDirections)
         {
             Vector2 futurePos = ProjectForward(gridPosition, direction, 1.0f);
-            if (ManhattanDistance(futurePos, letters[closestLetterIdx].getPosition()) < closestLetterDistance)
+            if (ManhattanDistance(futurePos, chosenLetter.getPosition()) < chosenLetterDistance)
             {
                 votes.Add(10.0f);
             } else
@@ -307,6 +315,7 @@ public class AIRacer : Racer
 		playerNum = 2;
         worldState = new WorldState(gameObject.GetComponent<Racer>(), otherRacer, floor);
 		powerBar = GameObject.Find("Bar2").GetComponent<PowerBar>();
+        trie = new Trie(wordSubmitter.GetDict());
 	}
 
     // Update is called once per frame

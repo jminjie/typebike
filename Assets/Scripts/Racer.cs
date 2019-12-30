@@ -74,7 +74,7 @@ public class Racer : MonoBehaviour
 
     protected PowerBar powerBar;
     
-    private WordSubmitter wordSubmitter;
+    protected WordSubmitter wordSubmitter;
 
     protected int playerNum;
     private Color color;

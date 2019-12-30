@@ -39,6 +39,11 @@ public class WordSubmitter
 
     }
 
+    public HashSet<string> GetDict()
+    {
+        return dict;
+    }
+
     // used for tests
     public static WordSubmitter GetWordSubmitterForTest()
     {
