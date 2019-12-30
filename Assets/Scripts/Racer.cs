@@ -210,42 +210,46 @@ public class Racer : MonoBehaviour
         wordSubmitter.addLetter(l.getValueAndDestroy());
         gameHandler.updateEatenLetters(playerNum, wordSubmitter.getWord()) ;
     }
+
+    // Does not include currentWall
     public List<Wall> GetWalls() => walls;
 
-    bool CollidesWithWall(Wall wall)
+    public Wall GetCurrentWall() => currentWall;
+
+    public bool CollidesWithWall(Vector2 gridPosition, Wall wall)
     {
         float frameChange = 0.5f;
         float epsilon = 0.001f;
         float bufferCheck = frameChange - epsilon;
         if (wall.direction == UP)
         {
-            if (_gridPosition.y > wall.startPos.y - bufferCheck && _gridPosition.y < wall.endPos.y + bufferCheck)
+            if (gridPosition.y > wall.startPos.y - bufferCheck && gridPosition.y < wall.endPos.y + bufferCheck)
             {
-                return System.Math.Abs(_gridPosition.x - wall.startPos.x) < 1.0f;
+                return System.Math.Abs(gridPosition.x - wall.startPos.x) < 1.0f;
             }
             return false;
         }
         if (wall.direction == DOWN)
         {
-            if (_gridPosition.y < wall.startPos.y + bufferCheck && _gridPosition.y > wall.endPos.y - bufferCheck)
+            if (gridPosition.y < wall.startPos.y + bufferCheck && gridPosition.y > wall.endPos.y - bufferCheck)
             {
-                return System.Math.Abs(_gridPosition.x - wall.startPos.x) < 1.0f;
+                return System.Math.Abs(gridPosition.x - wall.startPos.x) < 1.0f;
             }
             return false;
         }
         if (wall.direction == LEFT)
         {
-            if (_gridPosition.x < wall.startPos.x + bufferCheck && _gridPosition.x > wall.endPos.x-bufferCheck)
+            if (gridPosition.x < wall.startPos.x + bufferCheck && gridPosition.x > wall.endPos.x-bufferCheck)
             {
-                return System.Math.Abs(_gridPosition.y - wall.startPos.y) < 1.0f;
+                return System.Math.Abs(gridPosition.y - wall.startPos.y) < 1.0f;
             }
             return false;
         }
         if (wall.direction == RIGHT)
         {
-            if (_gridPosition.x > wall.startPos.x - bufferCheck && _gridPosition.x < wall.endPos.x+bufferCheck)
+            if (gridPosition.x > wall.startPos.x - bufferCheck && gridPosition.x < wall.endPos.x+bufferCheck)
             {
-                return System.Math.Abs(_gridPosition.y - wall.startPos.y) < 1.0f;
+                return System.Math.Abs(gridPosition.y - wall.startPos.y) < 1.0f;
             }
             return false;
         }
@@ -256,7 +260,7 @@ public class Racer : MonoBehaviour
         foreach (Wall wall in GetWalls())
         {
 
-            if (CollidesWithWall(wall))
+            if (CollidesWithWall(_gridPosition, wall))
             {
                 Debug.Log("wall start " + wall.startPos.x + "," + wall.startPos.y);
                 Debug.Log("wall end " + wall.endPos.x + "," + wall.endPos.y);
@@ -266,13 +270,13 @@ public class Racer : MonoBehaviour
         }
         foreach (Wall wall in otherRacer.GetWalls())
         {
-            if (CollidesWithWall(wall))
+            if (CollidesWithWall(_gridPosition, wall))
             {
                 destroyTheRacer();
             }
         }
         // TODO: merge this logic with above loop
-        if (otherRacer.currentWall != null && CollidesWithWall(otherRacer.currentWall))
+        if (otherRacer.currentWall != null && CollidesWithWall(_gridPosition, otherRacer.currentWall))
         {
             destroyTheRacer();
         }
@@ -470,7 +474,7 @@ public class Racer : MonoBehaviour
         }
     }
 
-    public void respawn()
+    public virtual void respawn()
     {
         Debug.Log("Respawning");
         Explode();
