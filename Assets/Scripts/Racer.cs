@@ -126,6 +126,10 @@ public class Racer : MonoBehaviour
             w.destroy();   
         }
         walls.Clear();
+        if (currentWall != null) {
+            currentWall.destroy();
+            currentWall = null;
+        }
     }
 
     private void SetStartPosAndDir()
