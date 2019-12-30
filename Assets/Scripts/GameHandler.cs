@@ -34,7 +34,7 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         Debug.Log("Start called");
-        WordSubmitter.initDict();
+        WordSubmitter.initDict(this);
 
         bestWordUI = transform.GetChild(0).GetComponent<TextMesh>();
         scoreUI = transform.GetChild(1).GetComponent<TextMesh>();

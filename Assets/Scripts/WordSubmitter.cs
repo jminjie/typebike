@@ -21,7 +21,7 @@ public class WordSubmitter
 
     private Color ownerColor;
 
-    public static void initDict()
+    public static void initDict(GameHandler gameHandler)
     {
         if (dict == null) {
             TextAsset textAsset = (TextAsset) Resources.Load("dictionary", typeof(TextAsset));
@@ -35,7 +35,7 @@ public class WordSubmitter
         {
             Debug.Log("should not call initDict twice but you did so");
         }
-        gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
+        gameHandler = gameHandler;
 
     }
 

@@ -12,7 +12,7 @@ namespace Tests
         public void WordSubmitterTest2_HELLOisValid()
         {
             // Use the Assert cl  // Use the Assert class to test conditions
-            WordSubmitter.initDict();
+            WordSubmitter.initDict(null /* gameHandler not needed for this test */);
             WordSubmitter wordSubmitter = WordSubmitter.GetWordSubmitterForTest();
             wordSubmitter.addLetter("H");
             wordSubmitter.addLetter("E");
@@ -26,7 +26,7 @@ namespace Tests
         public void WordSubmitterTest2_HELLPisInvalid()
         {
             // Use the Assert cl  // Use the Assert class to test conditions
-            WordSubmitter.initDict();
+            WordSubmitter.initDict(null /* gameHandler not needed for this test */);
             WordSubmitter wordSubmitter = WordSubmitter.GetWordSubmitterForTest();
             wordSubmitter.addLetter("H");
             wordSubmitter.addLetter("E");
