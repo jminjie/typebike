@@ -1,15 +1,8 @@
 ﻿<Properties StartupConfiguration="{BB039D9A-E43E-1963-6E31-BD65F9E3185A}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Racer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Racer2.cs">
     <Files>
-      <File FileName="Assets/Scripts/GameHandler.cs" Line="196" Column="1" />
-      <File FileName="Assets/Scripts/Racer.cs" Line="548" Column="24" />
-      <File FileName="Assets/Scripts/WordSubmitter.cs" />
-      <File FileName="Assets/Scripts/Racer1.cs" />
-      <File FileName="Assets/Scripts/Letter.cs" />
-      <File FileName="Assets/Scripts/AIRacer.cs" />
-      <File FileName="Assets/Scripts/Racer2.cs" />
-      <File FileName="Assets/Scripts/Floor.cs" />
-      <File FileName="Assets/Scripts/MainMenuText.cs" />
+      <File FileName="Assets/Scripts/Racer1.cs" Line="29" Column="56" />
+      <File FileName="Assets/Scripts/Racer2.cs" Line="31" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -17,7 +10,7 @@
           <Node name="TypeByke" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="Racer.cs" selected="True" />
+                <Node name="Racer2.cs" selected="True" />
               </Node>
             </Node>
           </Node>
