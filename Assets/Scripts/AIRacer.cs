@@ -119,7 +119,7 @@ public class AIRacer : Racer
     {
         foreach (Wall wall in walls)
         {
-            if (base.CollidesWithWall(wall))
+            if (base.CollidesWithWall(futurePos, wall))
             {
                 return true;
             }
@@ -128,7 +128,7 @@ public class AIRacer : Racer
     }
 
 
-    List<float> CollisionAvoidance(
+    private List<float> CollisionAvoidance(
     Vector2 gridPosition,
     List<Wall> allWalls,
     List<int> possibleDirections)
@@ -136,9 +136,20 @@ public class AIRacer : Racer
         List<float> votes = new List<float>();
         foreach (int direction in possibleDirections)
         {
-            Vector2 futurePos = ProjectForward(gridPosition, direction, 3.0f);
-            (bool wouldBeOob, _) = Floor.OutOfBounds(futurePos);
-            bool collidesWithWalls = CollidesWithWalls(futurePos, allWalls);
+            Vector2 futurePos3 = ProjectForward(gridPosition, direction, 3.0f);
+
+            Vector2 futurePos1 = ProjectForward(gridPosition, direction, 1.0f);
+            Vector2 futurePos2 = ProjectForward(gridPosition, direction, 2.0f);
+
+
+            bool collidesWithWalls =
+                    CollidesWithWalls(futurePos1, allWalls) ||
+                    CollidesWithWalls(futurePos2, allWalls) ||
+                    CollidesWithWalls(futurePos3, allWalls);
+            Debug.Log("colliding: " + collidesWithWalls);
+
+            (bool wouldBeOob, _) = Floor.OutOfBounds(futurePos3);
+
             if (wouldBeOob || collidesWithWalls)
             {
                 votes.Add(0.0f);
@@ -148,6 +159,7 @@ public class AIRacer : Racer
                 votes.Add(100.0f);
             }
         }
+        Assert.IsTrue(votes.Count == 3);
         return votes;
     }
 
@@ -166,7 +178,7 @@ public class AIRacer : Racer
         // Get closest letter
         if (letters.Count == 0)
         {
-            return new List<float>(possibleDirections.Count);
+            return new List<float>(new float[possibleDirections.Count]);
         }
 
         float closestLetterDistance = float.MaxValue;
@@ -192,6 +204,7 @@ public class AIRacer : Racer
                 votes.Add(0.0f);
             }
         }
+        Assert.IsTrue(votes.Count == 3);
         return votes;
     }
 
@@ -224,7 +237,6 @@ public class AIRacer : Racer
     // Returns true if _direction was changed
     bool SelectDirection()
     {
-        moveTimer += Time.deltaTime;
 
         List<int> possibleDirections =  new List<int>() {
             _direction,
@@ -241,6 +253,10 @@ public class AIRacer : Racer
         List<float> collisionAvoidanceVotes = CollisionAvoidance(_gridPosition, allWalls, possibleDirections);
         List<float> seekingGoalVotes = GoalSeeking(_gridPosition, floor.GetLetters(), possibleDirections);
         List<float> avoidingOpponentVotes = AvoidOtherRacer(_gridPosition, otherRacer.getPosition(), possibleDirections);
+
+        Assert.IsTrue(collisionAvoidanceVotes.Count == 3);
+        Assert.IsTrue(seekingGoalVotes.Count == 3);
+        Assert.IsTrue(avoidingOpponentVotes.Count == 3);
 
         float bestScore = -1f;
         int bestChoice = -1;
@@ -262,6 +278,11 @@ public class AIRacer : Racer
         return false;
     }
 
+    public override void respawn()
+    {
+        base.respawn();
+        _direction = UP;
+    }
 
     void Move(bool changed) {
         if (!changed)
@@ -291,7 +312,6 @@ public class AIRacer : Racer
     // Update is called once per frame
     void Update()
     {
-
         bool changed = SelectDirection();
 		Move(changed);
 	}

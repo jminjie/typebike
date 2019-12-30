@@ -36,8 +36,6 @@ public class WordSubmitter
             Debug.Log("should not call initDict twice but you did so");
         }
         gameHandler = GameObject.Find("GameObject").GetComponent<GameHandler>();
-        highestScoringWord = "";
-        highestScoringWordPoints = 0;
 
     }
 
@@ -51,6 +49,8 @@ public class WordSubmitter
     {
         currentWord = "";
         ownerColor = color;
+        highestScoringWord = "";
+        highestScoringWordPoints = 0;
     }
 
     private string currentWord;

@@ -52,17 +52,14 @@ public class GameHandler : MonoBehaviour
     private void setUIPositions()
     {
         bestWordUI.transform.position = new Vector3(76, 106);
-        transform.GetChild(1).transform.position = new Vector3(0, 106); // score
-        transform.GetChild(2).transform.position = new Vector3(0, -1); //p1word
-        transform.GetChild(3).transform.position = new Vector3(103, -1); //p2word
+        scoreUI.transform.position = new Vector3(0, 106);
+        p1WordUI.transform.position = new Vector3(0, -1);
+        p2WordUI.transform.position = new Vector3(103, -1);
         winTextUI.transform.position = new Vector3(75, 60);
     }
 
     private void reset()
     {
-        bestWord = "";
-        bestWordPlayerColor = Color.white;
-        bestWordPoints = 0;
         winTextUI.text = "";
 
         gameIsOver = false;
@@ -70,12 +67,12 @@ public class GameHandler : MonoBehaviour
         player2Letters = "";
         player1Points = 0;
         player2Points = 0;
+        updateGameUI();
     }
 
     public void setBestWord(Color playerColor, string word, int points)
     {
         bestWordPlayerColor = playerColor;
-        Debug.Log("Setting best word player color = " + playerColor);
         bestWord = word;
         bestWordPoints = points;
         updateGameUI();
@@ -170,10 +167,13 @@ public class GameHandler : MonoBehaviour
         p2WordUI.text = "PLAYER 2: " + player2Letters;
     }
 
-    private void ResetWins()
+    private void ResetWinsAndBest()
     {
         player1Wins = 0;
         player2Wins = 0;
+        bestWord = "";
+        bestWordPlayerColor = Color.white;
+        bestWordPoints = 0;
     }
 
     // Update is called once per frame
@@ -188,7 +188,7 @@ public class GameHandler : MonoBehaviour
         }
         if (gameIsOver && Input.GetKeyDown(KeyCode.M))
         {
-            ResetWins();
+            ResetWinsAndBest();
             SceneManager.LoadScene("MainMenu");
         }
     }

@@ -21,11 +21,11 @@ public class Racer1 : Racer
     void Update()
     {
         base.UpdateBase(
-            Input.GetKeyDown(KeyCode.UpArrow),
-            Input.GetKeyDown(KeyCode.DownArrow),
-            Input.GetKeyDown(KeyCode.LeftArrow),
-            Input.GetKeyDown(KeyCode.RightArrow),
-            /*wallKey=*/Input.GetKeyDown(KeyCode.Return),
-            /*submitKey=*/Input.GetKeyDown(KeyCode.Quote));
+            Input.GetKeyDown(KeyCode.W),
+            Input.GetKeyDown(KeyCode.S),
+            Input.GetKeyDown(KeyCode.A),
+            Input.GetKeyDown(KeyCode.D),
+            /*wallKey=*/Input.GetKeyDown(KeyCode.Space),
+            /*submitKey=*/Input.GetKeyDown(KeyCode.C));
     }
 }
