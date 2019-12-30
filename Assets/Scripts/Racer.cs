@@ -315,7 +315,6 @@ public class Racer : MonoBehaviour
         SetSpeedLineBrightness(0);
         activateBoostTime = 0f;
         velocity = ORIGINAL_VELOCITY;
-
     }
 
     private void HandleBoost(int dir)
@@ -484,6 +483,11 @@ public class Racer : MonoBehaviour
 
         // clear walls
         clearWalls();
+
+        // no longer lay wall, no longer dash
+        currentlyWalling = false;
+        EndBoost();
+        
 
         // set position and direction
         SetStartPosAndDir();
