@@ -418,19 +418,19 @@ public class Racer : MonoBehaviour
         if (moveTimer >= moveTimerMax) {
             if (currentDirection == UP)
             {
-                _gridPosition.y += moveTimerMax * velocity;
+                _gridPosition.y += moveTimer * velocity;
             }
             else if (currentDirection == DOWN)
             {
-                _gridPosition.y -= moveTimerMax * velocity;
+                _gridPosition.y -= moveTimer * velocity;
             }
             else if (currentDirection == LEFT)
             {
-                _gridPosition.x -= moveTimerMax * velocity;
+                _gridPosition.x -= moveTimer * velocity;
             }
             else if (currentDirection == RIGHT)
             {
-                _gridPosition.x += moveTimerMax * velocity;
+                _gridPosition.x += moveTimer * velocity;
             }
             transform.position = new Vector3(_gridPosition.x, _gridPosition.y);
             moveTimer = 0;
