@@ -184,6 +184,24 @@ public class AIRacer : Racer
         return letters[closestLetterIdx];
     }
 
+    Letter GetMostValuableLetter(string currentWord, List<Letter> letters)
+    {
+        int maxCount = -1;
+        Letter bestLetter = null;
+        foreach (Letter letter in letters)
+        {
+            string futureWord = currentWord + letter.getValue();
+            int prefixCount = trie.Count(futureWord);
+            if (prefixCount > maxCount)
+            {
+                maxCount = prefixCount;
+                bestLetter = letter;
+            }
+        }
+        Debug.Log("going after letter " + bestLetter.getValue() + " because it makes " + maxCount + " prefixes in dict");
+        return bestLetter;
+    }
+
     List<float> GoalSeeking(
     Vector2 gridPosition,
     List<Letter> letters,
@@ -197,7 +215,8 @@ public class AIRacer : Racer
             return new List<float>(new float[possibleDirections.Count]);
         }
 
-        Letter chosenLetter = GetClosestLetter(gridPosition, letters);
+        // Letter chosenLetter = GetClosestLetter(gridPosition, letters);
+        Letter chosenLetter = GetMostValuableLetter(wordSubmitter.getWord(), letters);
         float chosenLetterDistance = ManhattanDistance(gridPosition, chosenLetter.getPosition());
 
 

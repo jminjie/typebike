@@ -46,6 +46,12 @@ public class Letter
         return position;
     }
 
+    // Should only be used by AI-Racer
+    public string getValue()
+    {
+        return value;
+    }
+
     public string getValueAndDestroy()
     {
         if (isEaten)
