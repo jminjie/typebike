@@ -21,5 +21,9 @@ public class MainMenuText : MonoBehaviour
 		{
 			UnityEngine.SceneManagement.SceneManager.LoadScene("PlayerVsAIScene");
 		}
+		if (Input.GetKeyDown(KeyCode.Alpha0))
+		{
+			UnityEngine.SceneManagement.SceneManager.LoadScene("AIVsAIScene");
+		}
 	}
 }

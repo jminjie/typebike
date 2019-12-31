@@ -19,7 +19,7 @@ public class Floor : MonoBehaviour
     private const int MAX_LETTERS = 20;
 
     // spawn time between letters
-    private const float MAX_LETTER_SPAWN_TIME = 2f;
+    private const float MAX_LETTER_SPAWN_TIME = 1.5f;
 
     // range to count a letter collision
     private const float LETTER_COLLISION_RANGE = Letter.TILE_SIZE;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+
 public class WorldState
 {
     public WorldState(Racer me, Racer opponent, Floor floor)
@@ -20,12 +21,10 @@ public class WorldState
 
 public class AIRacer : Racer
 {
-	// Visible Game State that AI needs 
-	private float moveTimer;
-
     // current direction
 	private int _direction;
     private WorldState worldState;
+    public string otherRacerString;
 
     Vector2 ProjectForward(Vector2 curPos, int direction, float projectionDistance)
     {
@@ -200,9 +199,9 @@ public class AIRacer : Racer
     }
 
     List<float> GoalSeeking(
-    Vector2 gridPosition,
-    List<Letter> letters,
-    List<int> possibleDirections)
+            Vector2 gridPosition,
+            List<Letter> letters,
+            List<int> possibleDirections)
     {
         List<float> votes = new List<float>();
 
@@ -326,11 +325,58 @@ public class AIRacer : Racer
         }   
 
         bool wantToWall = false;
-        if (ManhattanDistance(_gridPosition, otherRacer.getPosition()) < 10)
+        Vector2 otherRacersProjectedPosition1 = ProjectForward(otherRacer.getPosition(), otherRacer.GetDirection(), 1);
+        Vector2 otherRacersProjectedPosition2 = ProjectForward(otherRacer.getPosition(), otherRacer.GetDirection(), 2);
+        Vector2 otherRacersProjectedPosition3 = ProjectForward(otherRacer.getPosition(), otherRacer.GetDirection(), 3);
+        Vector2 otherRacersProjectedPosition4 = ProjectForward(otherRacer.getPosition(), otherRacer.GetDirection(), 4);
+        Vector2 otherRacersProjectedPosition5 = ProjectForward(otherRacer.getPosition(), otherRacer.GetDirection(), 5);
+        if (ManhattanDistance(_gridPosition, otherRacer.getPosition()) < 10
+            && (IsBehindMe(otherRacer.getPosition())
+            || IsBehindMe(otherRacersProjectedPosition1)
+            || IsBehindMe(otherRacersProjectedPosition2)
+            || IsBehindMe(otherRacersProjectedPosition3)
+            || IsBehindMe(otherRacersProjectedPosition4)
+            || IsBehindMe(otherRacersProjectedPosition5)
+            || ManhattanDistance(_gridPosition, otherRacer.getPosition()) < 2))
         {
             wantToWall = true;
         }
         return _currentlyWalling != wantToWall;
+    }
+
+    public bool IsBehindMe(Vector2 theirPosition)
+    {
+        // what direction they are from my vantage point
+        Vector2 relativePosition = theirPosition - _gridPosition;
+        return AIRacer.GetDirectionOfVector(relativePosition) == OppositeDir(GetDirection());
+    }
+
+    // visible for testing
+    public static int GetDirectionOfVector(Vector2 v)
+    {
+        double angle = System.Math.Atan2(v.y, v.x);
+        const double buffer = System.Math.PI / 6;
+        const double pi = System.Math.PI;
+        // 0 radians is RIGHT, so anything within PI/4 we will consider RIGHT (etc)
+        if (angle <= 0 + buffer && angle >= 0 - buffer)
+        {
+            return RIGHT;
+        }
+        else if (angle <= pi/2 + buffer && angle >= pi/2 - buffer)
+        {
+            return UP;
+        }
+        else if (angle <= pi + buffer && angle >= pi - buffer)
+        {
+            return LEFT;
+        }
+        else if (angle <= 3*pi/2 + buffer && angle >= 3*pi/2 - buffer)
+        {
+            return DOWN;
+        } else
+        {
+            return -1;
+        }
     }
 
     public override void respawn()
@@ -354,17 +400,17 @@ public class AIRacer : Racer
 		bool moveRight = _direction == RIGHT;
 		UpdateBase(moveUp, moveDown, moveLeft, moveRight, toggleWall, submitWord);
 	}
+
 	// Start is called before the first frame update
 	void Awake()
     {
-		base.AwakeBase(
-			/*x=*/Floor.WIDTH / 3 * 2,
-			/*y=*/Floor.HEIGHT / 3,
-			/*otherRacerString=*/"Racer1",
-			new Color(255, 0, 221));
-		playerNum = 2;
+        base.AwakeBase(
+            /*x=*/Floor.WIDTH / 3 * playerNum,
+            /*y=*/Floor.HEIGHT / 3,
+            otherRacerString,
+            racerColor);
         worldState = new WorldState(gameObject.GetComponent<Racer>(), otherRacer, floor);
-		_powerBar = GameObject.Find("Bar2").GetComponent<PowerBar>();
+		_powerBar = GameObject.Find("Bar" + playerNum).GetComponent<PowerBar>();
 	}
 
     // Update is called once per frame

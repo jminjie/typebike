@@ -419,8 +419,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2f5c8d8eb8ece4aae7b21ade10b6d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  racerColor: {r: 0, g: 0.9596045, b: 1, a: 1}
   floor: {fileID: 0}
   gameHandler: {fileID: 0}
+  playerNum: 1
 --- !u!1 &464567187
 GameObject:
   m_ObjectHideFlags: 0
@@ -1415,7 +1417,6 @@ GameObject:
   - component: {fileID: 1938460150}
   - component: {fileID: 1938460149}
   - component: {fileID: 1938460148}
-  - component: {fileID: 1938460147}
   - component: {fileID: 1938460146}
   m_Layer: 0
   m_Name: Racer2
@@ -1436,20 +1437,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9903bd9540bcd4fd290352c5e0b27744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  racerColor: {r: 0.968729, g: 0, b: 1, a: 1}
   floor: {fileID: 0}
   gameHandler: {fileID: 0}
---- !u!114 &1938460147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938460145}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32c0b8a0fc82b45ee8e953e52cefe2de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  playerNum: 2
 --- !u!65 &1938460148
 BoxCollider:
   m_ObjectHideFlags: 0

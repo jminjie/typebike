@@ -58,6 +58,8 @@ public class Racer : MonoBehaviour
     private float activateBoostTime;
     private float wallingStartTime;
 
+    public Color racerColor;
+
 
     private const int START_DIR = UP;
     private int currentDirection = START_DIR;
@@ -76,7 +78,7 @@ public class Racer : MonoBehaviour
     
     protected WordSubmitter wordSubmitter;
 
-    protected int playerNum;
+    public int playerNum;
     private Color color;
 
     private Transform speedLine1;
@@ -137,6 +139,11 @@ public class Racer : MonoBehaviour
         _gridPosition = startGridPosition;
         currentDirection = START_DIR;
         setSpeedLines();
+    }
+
+    public int GetDirection()
+    {
+        return currentDirection;
     }
 
     // called whenever direction changes

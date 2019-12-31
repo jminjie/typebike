@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: e64495de7ae924b8e9d2ce6f68e40123
   - enabled: 0
-    path: Assets/__DELETED_GUID_Trash/2cda990e2423bbf4892e6590ba056729
+    path: 
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/PlayerVsPlayerScene.unity
@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PlayerVsAIScene.unity
     guid: cebf2bd92d9b94c6ca89b99c98d12521
+  - enabled: 1
+    path: Assets/Scenes/AIVsAIScene.unity
+    guid: 30ab7864f194b004f8b97cb4867f2532
   m_configObjects: {}
