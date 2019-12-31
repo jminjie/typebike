@@ -26,7 +26,6 @@ public class AIRacer : Racer
     // current direction
 	private int _direction;
     private WorldState worldState;
-    private Trie trie;
 
     Vector2 ProjectForward(Vector2 curPos, int direction, float projectionDistance)
     {
@@ -191,7 +190,7 @@ public class AIRacer : Racer
         foreach (Letter letter in letters)
         {
             string futureWord = currentWord + letter.getValue();
-            int prefixCount = trie.Count(futureWord);
+            int prefixCount = wordSubmitter.GetTrie().Count(futureWord);
             if (prefixCount > maxCount)
             {
                 maxCount = prefixCount;
@@ -236,7 +235,7 @@ public class AIRacer : Racer
     }
 
 
-
+    /*
     List<float> AvoidOtherRacer(
     Vector2 gridPosition,
     Vector2 otherRacerPosition,
@@ -259,6 +258,7 @@ public class AIRacer : Racer
         }
         return votes;
     }
+    */
 
 
     // Returns true if _direction was changed
@@ -279,17 +279,17 @@ public class AIRacer : Racer
         }
         List<float> collisionAvoidanceVotes = CollisionAvoidance(_gridPosition, allWalls, possibleDirections);
         List<float> seekingGoalVotes = GoalSeeking(_gridPosition, floor.GetLetters(), possibleDirections);
-        List<float> avoidingOpponentVotes = AvoidOtherRacer(_gridPosition, otherRacer.getPosition(), possibleDirections);
+        //List<float> avoidingOpponentVotes = AvoidOtherRacer(_gridPosition, otherRacer.getPosition(), possibleDirections);
 
         Assert.IsTrue(collisionAvoidanceVotes.Count == 3);
         Assert.IsTrue(seekingGoalVotes.Count == 3);
-        Assert.IsTrue(avoidingOpponentVotes.Count == 3);
+        //Assert.IsTrue(avoidingOpponentVotes.Count == 3);
 
         float bestScore = -1f;
         int bestChoice = -1;
         for (int i =0; i < possibleDirections.Count; ++i)
         {
-            float score = collisionAvoidanceVotes[i] + seekingGoalVotes[i] + avoidingOpponentVotes[i];
+            float score = collisionAvoidanceVotes[i] + seekingGoalVotes[i];
             if (score > bestScore)
             {               
                 bestChoice = i;
@@ -308,12 +308,12 @@ public class AIRacer : Racer
     public bool DecideSubmit()
     {
         // greedy logic for now - if this is a word, submit it.
-        if (trie.Find(wordSubmitter.getWord()))
+        if (wordSubmitter.GetTrie().Find(wordSubmitter.getWord()))
         {
             return true;
         }
         // If there are no more words with this prefix, submit to get rid of useless tiles
-        if (trie.Count(wordSubmitter.getWord()) == 0) {
+        if (wordSubmitter.GetTrie().Count(wordSubmitter.getWord()) == 0) {
             return true;
         }
         return false;
@@ -350,7 +350,6 @@ public class AIRacer : Racer
 		playerNum = 2;
         worldState = new WorldState(gameObject.GetComponent<Racer>(), otherRacer, floor);
 		powerBar = GameObject.Find("Bar2").GetComponent<PowerBar>();
-        trie = new Trie(wordSubmitter.GetDict());
 	}
 
     // Update is called once per frame

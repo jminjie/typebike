@@ -6,6 +6,7 @@ public class WordSubmitter
 {
 
     private static HashSet<string> dict;
+    private static Trie trie;
 
     private const string ONE_POINT = "AEIOULNSTR";
     private const string TWO_POINT = "DG";
@@ -27,6 +28,8 @@ public class WordSubmitter
             TextAsset textAsset = (TextAsset) Resources.Load("dictionary", typeof(TextAsset));
             if (textAsset != null) {
                 dict = new HashSet<string>(textAsset.text.Split("\n"[0]));
+                trie = new Trie(dict);
+                
             } else
             {
                 Debug.Log("Could not find dictionary txt file");
@@ -35,13 +38,18 @@ public class WordSubmitter
         {
             Debug.Log("should not call initDict twice but you did so");
         }
-        gameHandler = gameHandler;
+        WordSubmitter.gameHandler = gameHandler;
 
     }
 
     public HashSet<string> GetDict()
     {
         return dict;
+    }
+
+    public Trie GetTrie()
+    {
+        return trie;
     }
 
     // used for tests
