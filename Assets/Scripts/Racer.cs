@@ -64,7 +64,7 @@ public class Racer : MonoBehaviour
     private const float ORIGINAL_VELOCITY = 60.0f;
     private float velocity = ORIGINAL_VELOCITY;
 
-    private bool currentlyWalling = false;
+    protected bool _currentlyWalling = false;
     protected Wall currentWall;
     protected List<Wall> walls;
     protected List<PointsDisplay> pointsDisplays;
@@ -72,7 +72,7 @@ public class Racer : MonoBehaviour
     public Floor floor;
     public GameHandler gameHandler;
 
-    protected PowerBar powerBar;
+    protected PowerBar _powerBar;
     
     protected WordSubmitter wordSubmitter;
 
@@ -303,7 +303,7 @@ public class Racer : MonoBehaviour
         }
         SetSpeedLineBrightness(200);
         gameHandler.addPoints(playerNum, -1);
-        powerBar.removePoints(1);
+        _powerBar.removePoints(1);
         SetRacerColor(Color.white);
         activateBoostTime = Time.time;
         velocity = ORIGINAL_VELOCITY * 1.6f;
@@ -408,7 +408,7 @@ public class Racer : MonoBehaviour
                 int points = wordSubmitter.submitWord();
                 ShowPointsFromSubmitting(points);
                 gameHandler.addPoints(playerNum, points);
-                powerBar.addPoints(points);
+                _powerBar.addPoints(points);
                 gameHandler.updateEatenLetters(playerNum, "");
             }
         }
@@ -445,7 +445,7 @@ public class Racer : MonoBehaviour
         }
 
 
-        if (currentlyWalling && wallingStartTime + WALL_POINT_DURATION < Time.time)
+        if (_currentlyWalling && wallingStartTime + WALL_POINT_DURATION < Time.time)
         {
             int points = gameHandler.getPoints(playerNum);
             if (points <= 1)
@@ -456,7 +456,7 @@ public class Racer : MonoBehaviour
             if (points > 0)
             {
                 gameHandler.addPoints(playerNum, -1);
-                powerBar.removePoints(1);
+                _powerBar.removePoints(1);
             }
         }
     }
@@ -480,7 +480,7 @@ public class Racer : MonoBehaviour
         Explode();
 
         // reset power bar
-        powerBar.reset();
+        _powerBar.reset();
 
         // reset word
         wordSubmitter.reset();
@@ -489,7 +489,7 @@ public class Racer : MonoBehaviour
         clearWalls();
 
         // no longer lay wall, no longer dash
-        currentlyWalling = false;
+        _currentlyWalling = false;
         EndBoost();
         
 
@@ -502,13 +502,13 @@ public class Racer : MonoBehaviour
 
     private void StartWall()
     {
-        currentlyWalling = true;
+        _currentlyWalling = true;
         currentWall = new Wall(this, currentDirection);
     }
 
     private void EndWall()
     {
-        currentlyWalling = false;
+        _currentlyWalling = false;
         // Need to use wall direction here instead of racer direction because
         // racer may have already changed directions
         currentWall.endPos = BackOfRacer(currentWall.direction);
@@ -545,29 +545,29 @@ public class Racer : MonoBehaviour
 
     private void HandleWall(bool wallKeyPressed, int curDirection)
     {
-        if (!currentlyWalling && !wallKeyPressed)
+        if (!_currentlyWalling && !wallKeyPressed)
         {
             return;
         }
-        if (!currentlyWalling && wallKeyPressed)
+        if (!_currentlyWalling && wallKeyPressed)
         {
             if (!GODMODE && (gameHandler.getPoints(playerNum) < 1)) {
                 Debug.Log("not creating wall because player has no points");
                 return;
             }
             gameHandler.addPoints(playerNum, -1);
-            powerBar.removePoints(1);
+            _powerBar.removePoints(1);
             wallingStartTime = Time.time;
             StartWall();
             return;
         }
-        if (currentlyWalling && wallKeyPressed)
+        if (_currentlyWalling && wallKeyPressed)
         {
             Debug.Log("ending because wall key not pressed");
             EndWall();
             return;
         }
-        if (currentlyWalling && !wallKeyPressed)
+        if (_currentlyWalling && !wallKeyPressed)
         {
             Debug.Log("currently walling");
             if (curDirection != currentWall.direction)

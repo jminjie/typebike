@@ -128,9 +128,9 @@ public class AIRacer : Racer
 
 
     private List<float> CollisionAvoidance(
-    Vector2 gridPosition,
-    List<Wall> allWalls,
-    List<int> possibleDirections)
+            Vector2 gridPosition,
+            List<Wall> allWalls,
+            List<int> possibleDirections)
     {
         List<float> votes = new List<float>();
         foreach (int direction in possibleDirections)
@@ -145,7 +145,6 @@ public class AIRacer : Racer
                     CollidesWithWalls(futurePos1, allWalls) ||
                     CollidesWithWalls(futurePos2, allWalls) ||
                     CollidesWithWalls(futurePos3, allWalls);
-            Debug.Log("colliding: " + collidesWithWalls);
 
             (bool wouldBeOob, _) = Floor.OutOfBounds(futurePos3);
 
@@ -197,7 +196,6 @@ public class AIRacer : Racer
                 bestLetter = letter;
             }
         }
-        Debug.Log("going after letter " + bestLetter.getValue() + " because it makes " + maxCount + " prefixes in dict");
         return bestLetter;
     }
 
@@ -319,6 +317,22 @@ public class AIRacer : Racer
         return false;
     }
 
+    public bool DecideToggleWall()
+    {
+        // if we don't have any points, don't bother toggling
+        if (gameHandler.getPoints(playerNum) < 1)
+        {
+            return false;
+        }   
+
+        bool wantToWall = false;
+        if (ManhattanDistance(_gridPosition, otherRacer.getPosition()) < 10)
+        {
+            wantToWall = true;
+        }
+        return _currentlyWalling != wantToWall;
+    }
+
     public override void respawn()
     {
         base.respawn();
@@ -327,17 +341,18 @@ public class AIRacer : Racer
 
     void Move(
         bool directionChanged,
+        bool toggleWall,
         bool submitWord) {
         if (!directionChanged)
         {
-            UpdateBase(false, false, false, false, false, submitWord);
+            UpdateBase(false, false, false, false, toggleWall, submitWord);
             return;
         }
 		bool moveUp = _direction == UP;
 		bool moveDown = _direction == DOWN;
 		bool moveLeft = _direction == LEFT;
 		bool moveRight = _direction == RIGHT;
-		UpdateBase(moveUp, moveDown, moveLeft, moveRight, false, submitWord);
+		UpdateBase(moveUp, moveDown, moveLeft, moveRight, toggleWall, submitWord);
 	}
 	// Start is called before the first frame update
 	void Awake()
@@ -349,7 +364,7 @@ public class AIRacer : Racer
 			new Color(255, 0, 221));
 		playerNum = 2;
         worldState = new WorldState(gameObject.GetComponent<Racer>(), otherRacer, floor);
-		powerBar = GameObject.Find("Bar2").GetComponent<PowerBar>();
+		_powerBar = GameObject.Find("Bar2").GetComponent<PowerBar>();
 	}
 
     // Update is called once per frame
@@ -357,6 +372,7 @@ public class AIRacer : Racer
     {
         bool directionChanged = SelectDirection();
         bool submit = DecideSubmit();
-		Move(directionChanged, submit);
+        bool wall = DecideToggleWall();
+		Move(directionChanged, wall, submit);
 	}
 }

@@ -14,7 +14,7 @@ public class Racer1 : Racer
             /*otherRacerString=*/"Racer2",
             new Color(0, 217, 219));
         playerNum = 1;
-        powerBar = GameObject.Find("Bar1").GetComponent<PowerBar>();
+        _powerBar = GameObject.Find("Bar1").GetComponent<PowerBar>();
     }
 
     // Update is called once per frame
